@@ -1,0 +1,3386 @@
+{
+  "ChartRow": {
+    "properties": {
+      "row_number": {
+        "title": "Row Number",
+        "type": "integer"
+      },
+      "values": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Values",
+        "type": "array"
+      }
+    },
+    "required": [
+      "row_number",
+      "values"
+    ],
+    "title": "ChartRow",
+    "type": "object"
+  },
+  "ChartSample": {
+    "properties": {
+      "version_no": {
+        "title": "Version No",
+        "type": "integer"
+      },
+      "content_hash": {
+        "title": "Content Hash",
+        "type": "string"
+      },
+      "total_rows": {
+        "title": "Total Rows",
+        "type": "integer"
+      },
+      "columns": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Columns",
+        "type": "array"
+      },
+      "rows": {
+        "items": {
+          "$ref": "#/$defs/ChartRow"
+        },
+        "title": "Rows",
+        "type": "array"
+      },
+      "method": {
+        "enum": [
+          "complete",
+          "systematic-chunks-v1"
+        ],
+        "title": "Method",
+        "type": "string"
+      },
+      "truncated_cells": {
+        "default": 0,
+        "title": "Truncated Cells",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "version_no",
+      "content_hash",
+      "total_rows",
+      "columns",
+      "rows",
+      "method"
+    ],
+    "title": "ChartSample",
+    "type": "object"
+  },
+  "ImportOptions": {
+    "additionalProperties": false,
+    "properties": {
+      "delimiter": {
+        "default": "auto",
+        "enum": [
+          "auto",
+          ",",
+          ";",
+          "\t",
+          "|"
+        ],
+        "title": "Delimiter",
+        "type": "string"
+      },
+      "encoding": {
+        "default": "auto",
+        "enum": [
+          "auto",
+          "utf-8-sig",
+          "utf-16",
+          "cp1252"
+        ],
+        "title": "Encoding",
+        "type": "string"
+      },
+      "has_header": {
+        "default": true,
+        "title": "Has Header",
+        "type": "boolean"
+      },
+      "worksheet": {
+        "default": 1,
+        "maximum": 100,
+        "minimum": 1,
+        "title": "Worksheet",
+        "type": "integer"
+      },
+      "table_name": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Table Name"
+      }
+    },
+    "title": "ImportOptions",
+    "type": "object"
+  },
+  "CompanyProfile": {
+    "additionalProperties": false,
+    "properties": {
+      "industry": {
+        "maxLength": 120,
+        "minLength": 1,
+        "title": "Industry",
+        "type": "string"
+      },
+      "employee_count": {
+        "anyOf": [
+          {
+            "maximum": 1000000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Employee Count"
+      },
+      "it_staff_fte": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "It Staff Fte"
+      },
+      "monthly_budget": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Monthly Budget"
+      },
+      "initial_budget": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Initial Budget"
+      },
+      "currency": {
+        "const": "EUR",
+        "default": "EUR",
+        "title": "Currency",
+        "type": "string"
+      }
+    },
+    "required": [
+      "industry"
+    ],
+    "title": "CompanyProfile",
+    "type": "object"
+  },
+  "InfrastructureAsset": {
+    "additionalProperties": false,
+    "properties": {
+      "asset_key": {
+        "maxLength": 64,
+        "minLength": 1,
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "title": "Asset Key",
+        "type": "string"
+      },
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "asset_type": {
+        "enum": [
+          "SERVER",
+          "STORAGE",
+          "NETWORK",
+          "LICENSE",
+          "OTHER"
+        ],
+        "title": "Asset Type",
+        "type": "string"
+      },
+      "quantity": {
+        "default": 1,
+        "maximum": 1000000,
+        "minimum": 1,
+        "title": "Quantity",
+        "type": "integer"
+      },
+      "notes": {
+        "default": "",
+        "maxLength": 2000,
+        "title": "Notes",
+        "type": "string"
+      }
+    },
+    "required": [
+      "asset_key",
+      "name",
+      "asset_type"
+    ],
+    "title": "InfrastructureAsset",
+    "type": "object"
+  },
+  "Requirements": {
+    "additionalProperties": false,
+    "properties": {
+      "region": {
+        "default": "EU",
+        "maxLength": 64,
+        "minLength": 2,
+        "title": "Region",
+        "type": "string"
+      },
+      "hard_budget": {
+        "default": false,
+        "title": "Hard Budget",
+        "type": "boolean"
+      }
+    },
+    "title": "Requirements",
+    "type": "object"
+  },
+  "Workload": {
+    "additionalProperties": false,
+    "properties": {
+      "workload_key": {
+        "maxLength": 64,
+        "minLength": 1,
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "title": "Workload Key",
+        "type": "string"
+      },
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "workload_type": {
+        "enum": [
+          "BUSINESS_APP",
+          "WEB_APP",
+          "DATABASE",
+          "FILE_STORAGE",
+          "ANALYTICS",
+          "OTHER"
+        ],
+        "title": "Workload Type",
+        "type": "string"
+      },
+      "user_count": {
+        "anyOf": [
+          {
+            "maximum": 1000000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Count"
+      },
+      "vcpu_count": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Vcpu Count"
+      },
+      "memory_gib": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Memory Gib"
+      },
+      "storage_gib": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Storage Gib"
+      },
+      "max_latency_ms": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Max Latency Ms"
+      },
+      "availability_percent": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Availability Percent"
+      },
+      "rto_seconds": {
+        "anyOf": [
+          {
+            "maximum": 31536000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Rto Seconds"
+      },
+      "rpo_seconds": {
+        "anyOf": [
+          {
+            "maximum": 31536000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Rpo Seconds"
+      },
+      "sensitivity": {
+        "anyOf": [
+          {
+            "enum": [
+              "PUBLIC",
+              "INTERNAL",
+              "CONFIDENTIAL",
+              "RESTRICTED"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Sensitivity"
+      },
+      "internet_dependency_allowed": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Internet Dependency Allowed"
+      }
+    },
+    "required": [
+      "workload_key",
+      "name",
+      "workload_type"
+    ],
+    "title": "Workload",
+    "type": "object"
+  },
+  "ScenarioInput": {
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "company_profile": {
+        "$ref": "#/$defs/CompanyProfile"
+      },
+      "workloads": {
+        "items": {
+          "$ref": "#/$defs/Workload"
+        },
+        "maxItems": 10,
+        "minItems": 1,
+        "title": "Workloads",
+        "type": "array"
+      },
+      "infrastructure_assets": {
+        "items": {
+          "$ref": "#/$defs/InfrastructureAsset"
+        },
+        "maxItems": 100,
+        "title": "Infrastructure Assets",
+        "type": "array"
+      },
+      "requirements": {
+        "$ref": "#/$defs/Requirements"
+      }
+    },
+    "required": [
+      "name",
+      "company_profile",
+      "workloads"
+    ],
+    "title": "ScenarioInput",
+    "type": "object"
+  },
+  "AssessmentOptions": {
+    "additionalProperties": false,
+    "properties": {
+      "weight_profile": {
+        "default": "ECONOMIC",
+        "enum": [
+          "ECONOMIC",
+          "PERFORMANCE",
+          "CUSTOM"
+        ],
+        "title": "Weight Profile",
+        "type": "string"
+      },
+      "custom_weights": {
+        "anyOf": [
+          {
+            "additionalProperties": {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+              "type": "string"
+            },
+            "propertyNames": {
+              "enum": [
+                "cost",
+                "performance",
+                "resilience",
+                "operations",
+                "governance"
+              ]
+            },
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Custom Weights"
+      },
+      "horizon_months": {
+        "default": 36,
+        "maximum": 120,
+        "minimum": 1,
+        "title": "Horizon Months",
+        "type": "integer"
+      },
+      "valuation_date": {
+        "format": "date",
+        "title": "Valuation Date",
+        "type": "string"
+      }
+    },
+    "title": "AssessmentOptions",
+    "type": "object"
+  },
+  "CandidateResult": {
+    "additionalProperties": false,
+    "properties": {
+      "key": {
+        "enum": [
+          "SAAS",
+          "PAAS",
+          "IAAS",
+          "HYBRID"
+        ],
+        "title": "Key",
+        "type": "string"
+      },
+      "label": {
+        "title": "Label",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "ELIGIBLE",
+          "INDETERMINATE",
+          "EXCLUDED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "score": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Score"
+      },
+      "rank": {
+        "anyOf": [
+          {
+            "maximum": 20,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Rank"
+      },
+      "assignments": {
+        "items": {
+          "$ref": "#/$defs/WorkloadAssignment"
+        },
+        "title": "Assignments",
+        "type": "array"
+      },
+      "criterion_scores": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "propertyNames": {
+          "enum": [
+            "cost",
+            "performance",
+            "resilience",
+            "operations",
+            "governance"
+          ]
+        },
+        "title": "Criterion Scores",
+        "type": "object"
+      },
+      "constraints": {
+        "items": {
+          "$ref": "#/$defs/Constraint"
+        },
+        "title": "Constraints",
+        "type": "array"
+      },
+      "costs": {
+        "$ref": "#/$defs/CostResult"
+      },
+      "evidence_ids": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Evidence Ids",
+        "type": "array"
+      },
+      "assumptions": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Assumptions",
+        "type": "array"
+      },
+      "uncertainties": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Uncertainties",
+        "type": "array"
+      },
+      "explanation": {
+        "title": "Explanation",
+        "type": "string"
+      }
+    },
+    "required": [
+      "key",
+      "label",
+      "status",
+      "score",
+      "assignments",
+      "criterion_scores",
+      "constraints",
+      "costs",
+      "evidence_ids",
+      "assumptions",
+      "uncertainties",
+      "explanation"
+    ],
+    "title": "CandidateResult",
+    "type": "object"
+  },
+  "ComponentAssignment": {
+    "additionalProperties": false,
+    "properties": {
+      "role": {
+        "title": "Role",
+        "type": "string"
+      },
+      "service_model": {
+        "enum": [
+          "SAAS",
+          "PAAS",
+          "IAAS",
+          "SELF_MANAGED"
+        ],
+        "title": "Service Model",
+        "type": "string"
+      },
+      "deployment_model": {
+        "enum": [
+          "PUBLIC_CLOUD",
+          "PRIVATE_CLOUD",
+          "TRADITIONAL"
+        ],
+        "title": "Deployment Model",
+        "type": "string"
+      },
+      "hosting_location": {
+        "enum": [
+          "PROVIDER",
+          "ON_PREMISES",
+          "COLOCATION"
+        ],
+        "title": "Hosting Location",
+        "type": "string"
+      }
+    },
+    "required": [
+      "role",
+      "service_model",
+      "deployment_model",
+      "hosting_location"
+    ],
+    "title": "ComponentAssignment",
+    "type": "object"
+  },
+  "Constraint": {
+    "additionalProperties": false,
+    "properties": {
+      "key": {
+        "title": "Key",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "PASS",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "explanation": {
+        "title": "Explanation",
+        "type": "string"
+      },
+      "evidence_ids": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Evidence Ids",
+        "type": "array"
+      }
+    },
+    "required": [
+      "key",
+      "status",
+      "explanation",
+      "evidence_ids"
+    ],
+    "title": "Constraint",
+    "type": "object"
+  },
+  "CostLine": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "label": {
+        "title": "Label",
+        "type": "string"
+      },
+      "category": {
+        "enum": [
+          "CAPEX",
+          "OPEX"
+        ],
+        "title": "Category",
+        "type": "string"
+      },
+      "recurrence": {
+        "enum": [
+          "ONCE",
+          "MONTHLY"
+        ],
+        "title": "Recurrence",
+        "type": "string"
+      },
+      "quantity": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Quantity"
+      },
+      "unit_price": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Unit Price"
+      },
+      "total": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Total"
+      },
+      "price_id": {
+        "title": "Price Id",
+        "type": "string"
+      },
+      "evidence_ids": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Evidence Ids",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "label",
+      "category",
+      "recurrence",
+      "quantity",
+      "unit_price",
+      "total",
+      "price_id",
+      "evidence_ids"
+    ],
+    "title": "CostLine",
+    "type": "object"
+  },
+  "CostResult": {
+    "additionalProperties": false,
+    "properties": {
+      "currency": {
+        "const": "EUR",
+        "default": "EUR",
+        "title": "Currency",
+        "type": "string"
+      },
+      "complete": {
+        "title": "Complete",
+        "type": "boolean"
+      },
+      "capex_total": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Capex Total"
+      },
+      "opex_total": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Opex Total"
+      },
+      "tco_total": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Tco Total"
+      },
+      "startup_total": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Startup Total"
+      },
+      "monthly_total": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Monthly Total"
+      },
+      "lines": {
+        "items": {
+          "$ref": "#/$defs/CostLine"
+        },
+        "title": "Lines",
+        "type": "array"
+      }
+    },
+    "required": [
+      "complete",
+      "capex_total",
+      "opex_total",
+      "tco_total",
+      "startup_total",
+      "monthly_total",
+      "lines"
+    ],
+    "title": "CostResult",
+    "type": "object"
+  },
+  "Evidence": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "kind": {
+        "enum": [
+          "INPUT",
+          "CATALOG",
+          "RULE",
+          "CALCULATION"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "label": {
+        "title": "Label",
+        "type": "string"
+      },
+      "source": {
+        "title": "Source",
+        "type": "string"
+      },
+      "version": {
+        "title": "Version",
+        "type": "string"
+      },
+      "value": {
+        "default": null,
+        "title": "Value"
+      }
+    },
+    "required": [
+      "id",
+      "kind",
+      "label",
+      "source",
+      "version"
+    ],
+    "title": "Evidence",
+    "type": "object"
+  },
+  "SensitivityResult": {
+    "additionalProperties": false,
+    "properties": {
+      "tested_variations": {
+        "minimum": 0,
+        "title": "Tested Variations",
+        "type": "integer"
+      },
+      "winner_changes": {
+        "minimum": 0,
+        "title": "Winner Changes",
+        "type": "integer"
+      },
+      "score_gap": {
+        "anyOf": [
+          {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Score Gap"
+      },
+      "variations": {
+        "items": {
+          "$ref": "#/$defs/SensitivityVariation"
+        },
+        "title": "Variations",
+        "type": "array"
+      },
+      "explanation": {
+        "title": "Explanation",
+        "type": "string"
+      }
+    },
+    "required": [
+      "tested_variations",
+      "winner_changes",
+      "score_gap",
+      "variations",
+      "explanation"
+    ],
+    "title": "SensitivityResult",
+    "type": "object"
+  },
+  "SensitivityVariation": {
+    "additionalProperties": false,
+    "properties": {
+      "group": {
+        "enum": [
+          "cost",
+          "performance",
+          "resilience",
+          "operations",
+          "governance"
+        ],
+        "title": "Group",
+        "type": "string"
+      },
+      "factor": {
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d{0,6}0*$",
+        "title": "Factor",
+        "type": "string"
+      },
+      "winner_key": {
+        "anyOf": [
+          {
+            "enum": [
+              "SAAS",
+              "PAAS",
+              "IAAS",
+              "HYBRID"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Winner Key"
+      },
+      "changed": {
+        "title": "Changed",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "group",
+      "factor",
+      "winner_key",
+      "changed"
+    ],
+    "title": "SensitivityVariation",
+    "type": "object"
+  },
+  "VerificationResult": {
+    "additionalProperties": false,
+    "properties": {
+      "valid": {
+        "title": "Valid",
+        "type": "boolean"
+      },
+      "errors": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Errors",
+        "type": "array"
+      },
+      "checks": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Checks",
+        "type": "array"
+      }
+    },
+    "required": [
+      "valid",
+      "errors",
+      "checks"
+    ],
+    "title": "VerificationResult",
+    "type": "object"
+  },
+  "WorkloadAssignment": {
+    "additionalProperties": false,
+    "properties": {
+      "workload_key": {
+        "title": "Workload Key",
+        "type": "string"
+      },
+      "service_model": {
+        "enum": [
+          "SAAS",
+          "PAAS",
+          "IAAS",
+          "SELF_MANAGED"
+        ],
+        "title": "Service Model",
+        "type": "string"
+      },
+      "deployment_model": {
+        "enum": [
+          "PUBLIC_CLOUD",
+          "PRIVATE_CLOUD",
+          "TRADITIONAL"
+        ],
+        "title": "Deployment Model",
+        "type": "string"
+      },
+      "hosting_location": {
+        "enum": [
+          "PROVIDER",
+          "ON_PREMISES",
+          "COLOCATION"
+        ],
+        "title": "Hosting Location",
+        "type": "string"
+      },
+      "components": {
+        "items": {
+          "$ref": "#/$defs/ComponentAssignment"
+        },
+        "title": "Components",
+        "type": "array"
+      },
+      "explanation": {
+        "title": "Explanation",
+        "type": "string"
+      },
+      "evidence_ids": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Evidence Ids",
+        "type": "array"
+      }
+    },
+    "required": [
+      "workload_key",
+      "service_model",
+      "deployment_model",
+      "hosting_location",
+      "components",
+      "explanation",
+      "evidence_ids"
+    ],
+    "title": "WorkloadAssignment",
+    "type": "object"
+  },
+  "AssessmentResult": {
+    "additionalProperties": false,
+    "properties": {
+      "status": {
+        "enum": [
+          "VERIFIED",
+          "INCOMPLETE",
+          "NO_FEASIBLE_OPTION",
+          "VERIFICATION_FAILED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "candidates": {
+        "items": {
+          "$ref": "#/$defs/CandidateResult"
+        },
+        "title": "Candidates",
+        "type": "array"
+      },
+      "recommended_candidate_key": {
+        "anyOf": [
+          {
+            "enum": [
+              "SAAS",
+              "PAAS",
+              "IAAS",
+              "HYBRID"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Recommended Candidate Key"
+      },
+      "weights": {
+        "additionalProperties": {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        },
+        "propertyNames": {
+          "enum": [
+            "cost",
+            "performance",
+            "resilience",
+            "operations",
+            "governance"
+          ]
+        },
+        "title": "Weights",
+        "type": "object"
+      },
+      "horizon_months": {
+        "maximum": 120,
+        "minimum": 1,
+        "title": "Horizon Months",
+        "type": "integer"
+      },
+      "verification": {
+        "$ref": "#/$defs/VerificationResult"
+      },
+      "sensitivity": {
+        "$ref": "#/$defs/SensitivityResult"
+      },
+      "rule_set_version": {
+        "title": "Rule Set Version",
+        "type": "string"
+      },
+      "candidate_catalog_version": {
+        "title": "Candidate Catalog Version",
+        "type": "string"
+      },
+      "cost_catalog_version": {
+        "title": "Cost Catalog Version",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "$ref": "#/$defs/Evidence"
+        },
+        "title": "Evidence",
+        "type": "array"
+      },
+      "assumptions": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Assumptions",
+        "type": "array"
+      },
+      "uncertainties": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Uncertainties",
+        "type": "array"
+      },
+      "explanation": {
+        "title": "Explanation",
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "candidates",
+      "recommended_candidate_key",
+      "weights",
+      "horizon_months",
+      "verification",
+      "sensitivity",
+      "rule_set_version",
+      "candidate_catalog_version",
+      "cost_catalog_version",
+      "evidence",
+      "assumptions",
+      "uncertainties",
+      "explanation"
+    ],
+    "title": "AssessmentResult",
+    "type": "object"
+  },
+  "ColumnProfile": {
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "inferred_type": {
+        "enum": [
+          "empty",
+          "decimal",
+          "boolean",
+          "date",
+          "text"
+        ],
+        "title": "Inferred Type",
+        "type": "string"
+      },
+      "missing": {
+        "title": "Missing",
+        "type": "integer"
+      },
+      "distinct": {
+        "title": "Distinct",
+        "type": "integer"
+      },
+      "top_values": {
+        "items": {
+          "$ref": "#/$defs/Frequency"
+        },
+        "title": "Top Values",
+        "type": "array"
+      },
+      "minimum": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Minimum"
+      },
+      "maximum": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Maximum"
+      },
+      "mean": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Mean"
+      },
+      "outliers": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Outliers"
+      }
+    },
+    "required": [
+      "name",
+      "inferred_type",
+      "missing",
+      "distinct",
+      "top_values"
+    ],
+    "title": "ColumnProfile",
+    "type": "object"
+  },
+  "CsvImportInfo": {
+    "properties": {
+      "delimiter": {
+        "title": "Delimiter",
+        "type": "string"
+      },
+      "encoding": {
+        "title": "Encoding",
+        "type": "string"
+      },
+      "has_header": {
+        "title": "Has Header",
+        "type": "boolean"
+      },
+      "skipped_lines": {
+        "default": 0,
+        "title": "Skipped Lines",
+        "type": "integer"
+      },
+      "reader_version": {
+        "default": "csv-reader-2",
+        "title": "Reader Version",
+        "type": "string"
+      }
+    },
+    "required": [
+      "delimiter",
+      "encoding",
+      "has_header"
+    ],
+    "title": "CsvImportInfo",
+    "type": "object"
+  },
+  "DataProfile": {
+    "properties": {
+      "database_source": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Database Source"
+      },
+      "rows": {
+        "title": "Rows",
+        "type": "integer"
+      },
+      "columns": {
+        "items": {
+          "$ref": "#/$defs/ColumnProfile"
+        },
+        "title": "Columns",
+        "type": "array"
+      },
+      "missing_cells": {
+        "title": "Missing Cells",
+        "type": "integer"
+      },
+      "duplicate_rows": {
+        "title": "Duplicate Rows",
+        "type": "integer"
+      },
+      "completeness_percent": {
+        "title": "Completeness Percent",
+        "type": "string"
+      },
+      "sample": {
+        "items": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": "Sample",
+        "type": "array"
+      },
+      "profiling_version": {
+        "default": "csv-profile-1",
+        "title": "Profiling Version",
+        "type": "string"
+      },
+      "pipeline_version": {
+        "default": "csv-transform-1",
+        "title": "Pipeline Version",
+        "type": "string"
+      },
+      "statistics_note": {
+        "default": "",
+        "title": "Statistics Note",
+        "type": "string"
+      },
+      "import_info": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/CsvImportInfo"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "source_worksheet": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Source Worksheet"
+      },
+      "source_table": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Source Table"
+      },
+      "source_format": {
+        "default": "csv",
+        "enum": [
+          "csv",
+          "json",
+          "jsonl",
+          "xlsx",
+          "parquet",
+          "sqlite"
+        ],
+        "title": "Source Format",
+        "type": "string"
+      }
+    },
+    "required": [
+      "rows",
+      "columns",
+      "missing_cells",
+      "duplicate_rows",
+      "completeness_percent",
+      "sample"
+    ],
+    "title": "DataProfile",
+    "type": "object"
+  },
+  "Frequency": {
+    "properties": {
+      "value": {
+        "title": "Value",
+        "type": "string"
+      },
+      "count": {
+        "title": "Count",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "value",
+      "count"
+    ],
+    "title": "Frequency",
+    "type": "object"
+  },
+  "JobView": {
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "dataset_id": {
+        "format": "uuid",
+        "title": "Dataset Id",
+        "type": "string"
+      },
+      "kind": {
+        "enum": [
+          "IMPORT",
+          "PREVIEW"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "QUEUED",
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "progress": {
+        "default": 0,
+        "title": "Progress",
+        "type": "integer"
+      },
+      "progress_message": {
+        "default": "",
+        "title": "Progress Message",
+        "type": "string"
+      },
+      "processed_rows": {
+        "default": 0,
+        "title": "Processed Rows",
+        "type": "integer"
+      },
+      "import_options": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/ImportOptions"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "source_version": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Source Version"
+      },
+      "steps": {
+        "items": {
+          "$ref": "#/$defs/Step"
+        },
+        "title": "Steps",
+        "type": "array"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error"
+      },
+      "profile": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/DataProfile"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "result_hash": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Result Hash"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "finished_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Finished At"
+      }
+    },
+    "required": [
+      "id",
+      "dataset_id",
+      "kind",
+      "status",
+      "source_version",
+      "steps",
+      "error",
+      "profile",
+      "result_hash",
+      "created_at",
+      "finished_at"
+    ],
+    "title": "JobView",
+    "type": "object"
+  },
+  "Step": {
+    "additionalProperties": false,
+    "properties": {
+      "operation": {
+        "enum": [
+          "trim",
+          "fill_missing",
+          "lowercase",
+          "uppercase",
+          "drop_duplicates",
+          "drop_empty_rows"
+        ],
+        "title": "Operation",
+        "type": "string"
+      },
+      "column": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Column"
+      },
+      "value": {
+        "anyOf": [
+          {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Value"
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "title": "Step",
+    "type": "object"
+  },
+  "VersionView": {
+    "properties": {
+      "version_no": {
+        "title": "Version No",
+        "type": "integer"
+      },
+      "source_version": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Source Version"
+      },
+      "job_id": {
+        "format": "uuid",
+        "title": "Job Id",
+        "type": "string"
+      },
+      "content_hash": {
+        "title": "Content Hash",
+        "type": "string"
+      },
+      "profile": {
+        "$ref": "#/$defs/DataProfile"
+      },
+      "steps": {
+        "items": {
+          "$ref": "#/$defs/Step"
+        },
+        "title": "Steps",
+        "type": "array"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "created_by_user_id": {
+        "format": "uuid",
+        "title": "Created By User Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "version_no",
+      "source_version",
+      "job_id",
+      "content_hash",
+      "profile",
+      "steps",
+      "created_at",
+      "created_by_user_id"
+    ],
+    "title": "VersionView",
+    "type": "object"
+  },
+  "DatasetView": {
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "filename": {
+        "title": "Filename",
+        "type": "string"
+      },
+      "current_version": {
+        "title": "Current Version",
+        "type": "integer"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "original_hash": {
+        "title": "Original Hash",
+        "type": "string"
+      },
+      "original_bytes": {
+        "title": "Original Bytes",
+        "type": "integer"
+      },
+      "delimiter": {
+        "title": "Delimiter",
+        "type": "string"
+      },
+      "versions": {
+        "items": {
+          "$ref": "#/$defs/VersionView"
+        },
+        "title": "Versions",
+        "type": "array"
+      },
+      "jobs": {
+        "items": {
+          "$ref": "#/$defs/JobView"
+        },
+        "title": "Jobs",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "filename",
+      "current_version",
+      "created_at",
+      "original_hash",
+      "original_bytes",
+      "delimiter",
+      "versions",
+      "jobs"
+    ],
+    "title": "DatasetView",
+    "type": "object"
+  },
+  "DatasetSummary": {
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "filename": {
+        "title": "Filename",
+        "type": "string"
+      },
+      "current_version": {
+        "title": "Current Version",
+        "type": "integer"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "filename",
+      "current_version",
+      "created_at"
+    ],
+    "title": "DatasetSummary",
+    "type": "object"
+  },
+  "ImportInput": {
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "filename": {
+        "maxLength": 160,
+        "minLength": 1,
+        "pattern": "^[^/\\\\\\x00-\\x1f]+\\.csv$",
+        "title": "Filename",
+        "type": "string"
+      },
+      "content_base64": {
+        "maxLength": 174764,
+        "minLength": 1,
+        "title": "Content Base64",
+        "type": "string"
+      },
+      "delimiter": {
+        "default": ";",
+        "enum": [
+          ",",
+          ";",
+          "\t"
+        ],
+        "title": "Delimiter",
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "filename",
+      "content_base64"
+    ],
+    "title": "ImportInput",
+    "type": "object"
+  },
+  "UploadInput": {
+    "additionalProperties": false,
+    "properties": {
+      "delimiter": {
+        "default": "auto",
+        "enum": [
+          "auto",
+          ",",
+          ";",
+          "\t",
+          "|"
+        ],
+        "title": "Delimiter",
+        "type": "string"
+      },
+      "encoding": {
+        "default": "auto",
+        "enum": [
+          "auto",
+          "utf-8-sig",
+          "utf-16",
+          "cp1252"
+        ],
+        "title": "Encoding",
+        "type": "string"
+      },
+      "has_header": {
+        "default": true,
+        "title": "Has Header",
+        "type": "boolean"
+      },
+      "worksheet": {
+        "default": 1,
+        "maximum": 100,
+        "minimum": 1,
+        "title": "Worksheet",
+        "type": "integer"
+      },
+      "table_name": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Table Name"
+      },
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "filename": {
+        "maxLength": 160,
+        "minLength": 1,
+        "pattern": "^[^/\\\\\\x00-\\x1f]+\\.(?i:csv|json|jsonl|xlsx|parquet|sqlite|sqlite3|db)$",
+        "title": "Filename",
+        "type": "string"
+      },
+      "total_bytes": {
+        "maximum": 1073741824,
+        "minimum": 1,
+        "title": "Total Bytes",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "name",
+      "filename",
+      "total_bytes"
+    ],
+    "title": "UploadInput",
+    "type": "object"
+  },
+  "UploadView": {
+    "properties": {
+      "table_name": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Table Name"
+      },
+      "worksheet": {
+        "default": 1,
+        "title": "Worksheet",
+        "type": "integer"
+      },
+      "encoding": {
+        "default": "auto",
+        "title": "Encoding",
+        "type": "string"
+      },
+      "has_header": {
+        "default": true,
+        "title": "Has Header",
+        "type": "boolean"
+      },
+      "name": {
+        "default": "",
+        "title": "Name",
+        "type": "string"
+      },
+      "filename": {
+        "default": "",
+        "title": "Filename",
+        "type": "string"
+      },
+      "delimiter": {
+        "default": ";",
+        "title": "Delimiter",
+        "type": "string"
+      },
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "OPEN",
+          "SEALED",
+          "CANCELLED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "expected_bytes": {
+        "title": "Expected Bytes",
+        "type": "integer"
+      },
+      "received_bytes": {
+        "title": "Received Bytes",
+        "type": "integer"
+      },
+      "chunk_count": {
+        "title": "Chunk Count",
+        "type": "integer"
+      },
+      "chunk_bytes": {
+        "default": 4194304,
+        "title": "Chunk Bytes",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "id",
+      "status",
+      "expected_bytes",
+      "received_bytes",
+      "chunk_count"
+    ],
+    "title": "UploadView",
+    "type": "object"
+  },
+  "PreviewInput": {
+    "additionalProperties": false,
+    "properties": {
+      "source_version": {
+        "minimum": 1,
+        "title": "Source Version",
+        "type": "integer"
+      },
+      "steps": {
+        "items": {
+          "$ref": "#/$defs/Step"
+        },
+        "maxItems": 10,
+        "minItems": 1,
+        "title": "Steps",
+        "type": "array"
+      }
+    },
+    "required": [
+      "source_version",
+      "steps"
+    ],
+    "title": "PreviewInput",
+    "type": "object"
+  },
+  "CommitInput": {
+    "additionalProperties": false,
+    "properties": {
+      "preview_id": {
+        "format": "uuid",
+        "title": "Preview Id",
+        "type": "string"
+      },
+      "result_hash": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Result Hash",
+        "type": "string"
+      },
+      "expected_current_version": {
+        "minimum": 1,
+        "title": "Expected Current Version",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "preview_id",
+      "result_hash",
+      "expected_current_version"
+    ],
+    "title": "CommitInput",
+    "type": "object"
+  },
+  "QualityRule": {
+    "additionalProperties": false,
+    "properties": {
+      "column": {
+        "maxLength": 100,
+        "minLength": 1,
+        "title": "Column",
+        "type": "string"
+      },
+      "operation": {
+        "enum": [
+          "required",
+          "unique",
+          "decimal",
+          "date",
+          "boolean",
+          "range",
+          "allowed_values"
+        ],
+        "title": "Operation",
+        "type": "string"
+      },
+      "minimum": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Minimum"
+      },
+      "maximum": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Maximum"
+      },
+      "values": {
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 100,
+        "title": "Values",
+        "type": "array"
+      }
+    },
+    "required": [
+      "column",
+      "operation"
+    ],
+    "title": "QualityRule",
+    "type": "object"
+  },
+  "AnalysisInput": {
+    "additionalProperties": false,
+    "properties": {
+      "version_no": {
+        "minimum": 1,
+        "title": "Version No",
+        "type": "integer"
+      },
+      "numeric_columns": {
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 8,
+        "title": "Numeric Columns",
+        "type": "array"
+      },
+      "date_column": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Date Column"
+      },
+      "time_metric": {
+        "anyOf": [
+          {
+            "maxLength": 100,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Time Metric"
+      },
+      "time_grain": {
+        "default": "month",
+        "enum": [
+          "day",
+          "month"
+        ],
+        "title": "Time Grain",
+        "type": "string"
+      },
+      "ruleset_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Ruleset Id"
+      },
+      "rules": {
+        "items": {
+          "$ref": "#/$defs/QualityRule"
+        },
+        "maxItems": 50,
+        "title": "Rules",
+        "type": "array"
+      }
+    },
+    "required": [
+      "version_no"
+    ],
+    "title": "AnalysisInput",
+    "type": "object"
+  },
+  "RuleSetView": {
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "rules": {
+        "items": {
+          "$ref": "#/$defs/QualityRule"
+        },
+        "maxItems": 50,
+        "minItems": 1,
+        "title": "Rules",
+        "type": "array"
+      },
+      "replaces_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Replaces Id"
+      },
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "created_by_user_id": {
+        "format": "uuid",
+        "title": "Created By User Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "rules",
+      "id",
+      "created_at",
+      "created_by_user_id"
+    ],
+    "title": "RuleSetView",
+    "type": "object"
+  },
+  "PlanInput": {
+    "additionalProperties": false,
+    "properties": {
+      "version_no": {
+        "minimum": 1,
+        "title": "Version No",
+        "type": "integer"
+      },
+      "mode": {
+        "default": "rules",
+        "enum": [
+          "rules",
+          "openai"
+        ],
+        "title": "Mode",
+        "type": "string"
+      },
+      "approve_external_processing": {
+        "default": false,
+        "title": "Approve External Processing",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "version_no"
+    ],
+    "title": "PlanInput",
+    "type": "object"
+  },
+  "SourceView": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "tables": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Tables",
+        "type": "array"
+      },
+      "provider": {
+        "const": "postgresql",
+        "title": "Provider",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "tables",
+      "provider"
+    ],
+    "title": "SourceView",
+    "type": "object"
+  },
+  "SourceCatalog": {
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "items": {
+          "$ref": "#/$defs/SourceView"
+        },
+        "title": "Items",
+        "type": "array"
+      },
+      "live_ai_available": {
+        "title": "Live Ai Available",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "items",
+      "live_ai_available"
+    ],
+    "title": "SourceCatalog",
+    "type": "object"
+  },
+  "SourceImportInput": {
+    "additionalProperties": false,
+    "properties": {
+      "source_id": {
+        "maxLength": 80,
+        "minLength": 1,
+        "title": "Source Id",
+        "type": "string"
+      },
+      "table": {
+        "maxLength": 200,
+        "minLength": 1,
+        "title": "Table",
+        "type": "string"
+      },
+      "name": {
+        "maxLength": 160,
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source_id",
+      "table",
+      "name"
+    ],
+    "title": "SourceImportInput",
+    "type": "object"
+  },
+  "AnalysisResult": {
+    "additionalProperties": false,
+    "properties": {
+      "engine_version": {
+        "title": "Engine Version",
+        "type": "string"
+      },
+      "profile": {
+        "$ref": "#/$defs/DataProfile"
+      },
+      "options": {
+        "$ref": "#/$defs/AnalysisInput"
+      },
+      "numeric": {
+        "items": {
+          "$ref": "#/$defs/NumericStatistics"
+        },
+        "title": "Numeric",
+        "type": "array"
+      },
+      "correlations": {
+        "items": {
+          "$ref": "#/$defs/Correlation"
+        },
+        "title": "Correlations",
+        "type": "array"
+      },
+      "rules": {
+        "items": {
+          "$ref": "#/$defs/RuleResult"
+        },
+        "title": "Rules",
+        "type": "array"
+      },
+      "score": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Score"
+      },
+      "score_method": {
+        "title": "Score Method",
+        "type": "string"
+      },
+      "time_series": {
+        "$ref": "#/$defs/TimeSeries"
+      },
+      "notes": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Notes",
+        "type": "array"
+      },
+      "ruleset": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/RuleSetReference"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "dataset_id": {
+        "title": "Dataset Id",
+        "type": "string"
+      },
+      "version_no": {
+        "title": "Version No",
+        "type": "integer"
+      },
+      "content_hash": {
+        "title": "Content Hash",
+        "type": "string"
+      },
+      "original_hash": {
+        "title": "Original Hash",
+        "type": "string"
+      }
+    },
+    "required": [
+      "engine_version",
+      "profile",
+      "options",
+      "numeric",
+      "correlations",
+      "rules",
+      "score",
+      "score_method",
+      "time_series",
+      "notes",
+      "ruleset",
+      "dataset_id",
+      "version_no",
+      "content_hash",
+      "original_hash"
+    ],
+    "title": "AnalysisResult",
+    "type": "object"
+  },
+  "Correlation": {
+    "additionalProperties": false,
+    "properties": {
+      "x": {
+        "title": "X",
+        "type": "string"
+      },
+      "y": {
+        "title": "Y",
+        "type": "string"
+      },
+      "pairs": {
+        "title": "Pairs",
+        "type": "integer"
+      },
+      "pearson": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Pearson"
+      }
+    },
+    "required": [
+      "x",
+      "y",
+      "pairs",
+      "pearson"
+    ],
+    "title": "Correlation",
+    "type": "object"
+  },
+  "NumericStatistics": {
+    "additionalProperties": false,
+    "properties": {
+      "column": {
+        "title": "Column",
+        "type": "string"
+      },
+      "count": {
+        "title": "Count",
+        "type": "integer"
+      },
+      "missing": {
+        "title": "Missing",
+        "type": "integer"
+      },
+      "invalid": {
+        "title": "Invalid",
+        "type": "integer"
+      },
+      "mean": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Mean"
+      },
+      "minimum": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Minimum"
+      },
+      "q1": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Q1"
+      },
+      "median": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Median"
+      },
+      "q3": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Q3"
+      },
+      "maximum": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Maximum"
+      },
+      "sample_stddev": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Sample Stddev"
+      },
+      "outliers": {
+        "title": "Outliers",
+        "type": "integer"
+      },
+      "histogram": {
+        "items": {
+          "type": "integer"
+        },
+        "title": "Histogram",
+        "type": "array"
+      }
+    },
+    "required": [
+      "column",
+      "count",
+      "missing",
+      "invalid",
+      "mean",
+      "minimum",
+      "q1",
+      "median",
+      "q3",
+      "maximum",
+      "sample_stddev",
+      "outliers",
+      "histogram"
+    ],
+    "title": "NumericStatistics",
+    "type": "object"
+  },
+  "PlanCandidate": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "step": {
+        "$ref": "#/$defs/Step"
+      },
+      "reason": {
+        "title": "Reason",
+        "type": "string"
+      },
+      "evidence": {
+        "title": "Evidence",
+        "type": "string"
+      },
+      "risk": {
+        "const": "MEDIUM",
+        "title": "Risk",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "step",
+      "reason",
+      "evidence",
+      "risk"
+    ],
+    "title": "PlanCandidate",
+    "type": "object"
+  },
+  "PlanResult": {
+    "additionalProperties": false,
+    "properties": {
+      "mode": {
+        "enum": [
+          "rules",
+          "openai"
+        ],
+        "title": "Mode",
+        "type": "string"
+      },
+      "prompt_version": {
+        "title": "Prompt Version",
+        "type": "string"
+      },
+      "source_hash": {
+        "title": "Source Hash",
+        "type": "string"
+      },
+      "steps": {
+        "items": {
+          "$ref": "#/$defs/Step"
+        },
+        "title": "Steps",
+        "type": "array"
+      },
+      "candidates": {
+        "items": {
+          "$ref": "#/$defs/PlanCandidate"
+        },
+        "title": "Candidates",
+        "type": "array"
+      },
+      "facts": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "title": "Facts",
+        "type": "object"
+      },
+      "uncertainty": {
+        "title": "Uncertainty",
+        "type": "string"
+      },
+      "required_decision": {
+        "title": "Required Decision",
+        "type": "string"
+      },
+      "trace": {
+        "items": {
+          "$ref": "#/$defs/PlanTrace"
+        },
+        "title": "Trace",
+        "type": "array"
+      },
+      "reserved_usd": {
+        "title": "Reserved Usd",
+        "type": "string"
+      },
+      "model": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Model"
+      },
+      "price_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Price Version"
+      },
+      "input_hash": {
+        "title": "Input Hash",
+        "type": "string"
+      }
+    },
+    "required": [
+      "mode",
+      "prompt_version",
+      "source_hash",
+      "steps",
+      "candidates",
+      "facts",
+      "uncertainty",
+      "required_decision",
+      "trace",
+      "reserved_usd",
+      "model",
+      "price_version",
+      "input_hash"
+    ],
+    "title": "PlanResult",
+    "type": "object"
+  },
+  "PlanTrace": {
+    "additionalProperties": false,
+    "properties": {
+      "role": {
+        "title": "Role",
+        "type": "string"
+      },
+      "decision": {
+        "title": "Decision",
+        "type": "string"
+      }
+    },
+    "required": [
+      "role",
+      "decision"
+    ],
+    "title": "PlanTrace",
+    "type": "object"
+  },
+  "RuleResult": {
+    "additionalProperties": false,
+    "properties": {
+      "rule": {
+        "$ref": "#/$defs/QualityRule"
+      },
+      "checked": {
+        "title": "Checked",
+        "type": "integer"
+      },
+      "failed": {
+        "title": "Failed",
+        "type": "integer"
+      },
+      "example_rows": {
+        "items": {
+          "type": "integer"
+        },
+        "title": "Example Rows",
+        "type": "array"
+      }
+    },
+    "required": [
+      "rule",
+      "checked",
+      "failed",
+      "example_rows"
+    ],
+    "title": "RuleResult",
+    "type": "object"
+  },
+  "RuleSetReference": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "title": "Id",
+        "type": "string"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "created_at": {
+        "title": "Created At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "created_at"
+    ],
+    "title": "RuleSetReference",
+    "type": "object"
+  },
+  "SourceResult": {
+    "additionalProperties": false,
+    "properties": {
+      "dataset_id": {
+        "title": "Dataset Id",
+        "type": "string"
+      },
+      "job_id": {
+        "title": "Job Id",
+        "type": "string"
+      },
+      "original_hash": {
+        "title": "Original Hash",
+        "type": "string"
+      },
+      "source": {
+        "additionalProperties": true,
+        "title": "Source",
+        "type": "object"
+      }
+    },
+    "required": [
+      "dataset_id",
+      "job_id",
+      "original_hash",
+      "source"
+    ],
+    "title": "SourceResult",
+    "type": "object"
+  },
+  "TimePeriod": {
+    "additionalProperties": false,
+    "properties": {
+      "period": {
+        "title": "Period",
+        "type": "string"
+      },
+      "rows": {
+        "title": "Rows",
+        "type": "integer"
+      },
+      "valid_values": {
+        "title": "Valid Values",
+        "type": "integer"
+      },
+      "sum": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Sum"
+      },
+      "mean": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Mean"
+      }
+    },
+    "required": [
+      "period",
+      "rows",
+      "valid_values",
+      "sum",
+      "mean"
+    ],
+    "title": "TimePeriod",
+    "type": "object"
+  },
+  "TimeSeries": {
+    "additionalProperties": false,
+    "properties": {
+      "column": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Column"
+      },
+      "metric": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Metric"
+      },
+      "grain": {
+        "enum": [
+          "day",
+          "month"
+        ],
+        "title": "Grain",
+        "type": "string"
+      },
+      "invalid_dates": {
+        "title": "Invalid Dates",
+        "type": "integer"
+      },
+      "missing_dates": {
+        "title": "Missing Dates",
+        "type": "integer"
+      },
+      "invalid_or_missing_metrics": {
+        "title": "Invalid Or Missing Metrics",
+        "type": "integer"
+      },
+      "total_periods": {
+        "title": "Total Periods",
+        "type": "integer"
+      },
+      "periods": {
+        "items": {
+          "$ref": "#/$defs/TimePeriod"
+        },
+        "title": "Periods",
+        "type": "array"
+      }
+    },
+    "required": [
+      "column",
+      "metric",
+      "grain",
+      "invalid_dates",
+      "missing_dates",
+      "invalid_or_missing_metrics",
+      "total_periods",
+      "periods"
+    ],
+    "title": "TimeSeries",
+    "type": "object"
+  },
+  "TaskView": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "created_by_user_id": {
+        "format": "uuid",
+        "title": "Created By User Id",
+        "type": "string"
+      },
+      "dataset_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Dataset Id"
+      },
+      "version_no": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Version No"
+      },
+      "kind": {
+        "enum": [
+          "ANALYSIS",
+          "SOURCE",
+          "PLAN"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "QUEUED",
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "progress": {
+        "title": "Progress",
+        "type": "integer"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error"
+      },
+      "result_hash": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Result Hash"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "finished_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Finished At"
+      },
+      "result": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/AnalysisResult"
+          },
+          {
+            "$ref": "#/$defs/PlanResult"
+          },
+          {
+            "$ref": "#/$defs/SourceResult"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Result"
+      },
+      "request": {
+        "additionalProperties": true,
+        "title": "Request",
+        "type": "object"
+      }
+    },
+    "required": [
+      "id",
+      "created_by_user_id",
+      "dataset_id",
+      "version_no",
+      "kind",
+      "status",
+      "progress",
+      "message",
+      "error",
+      "result_hash",
+      "created_at",
+      "finished_at",
+      "result",
+      "request"
+    ],
+    "title": "TaskView",
+    "type": "object"
+  },
+  "TaskSummary": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "created_by_user_id": {
+        "format": "uuid",
+        "title": "Created By User Id",
+        "type": "string"
+      },
+      "dataset_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Dataset Id"
+      },
+      "version_no": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Version No"
+      },
+      "kind": {
+        "enum": [
+          "ANALYSIS",
+          "SOURCE",
+          "PLAN"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "QUEUED",
+          "RUNNING",
+          "SUCCEEDED",
+          "FAILED",
+          "CANCELLED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "progress": {
+        "title": "Progress",
+        "type": "integer"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error"
+      },
+      "result_hash": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Result Hash"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "finished_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Finished At"
+      }
+    },
+    "required": [
+      "id",
+      "created_by_user_id",
+      "dataset_id",
+      "version_no",
+      "kind",
+      "status",
+      "progress",
+      "message",
+      "error",
+      "result_hash",
+      "created_at",
+      "finished_at"
+    ],
+    "title": "TaskSummary",
+    "type": "object"
+  }
+}

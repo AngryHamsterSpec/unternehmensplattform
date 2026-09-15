@@ -1,0 +1,198 @@
+name: unternehmensplattform
+x-app-environment: &app-environment
+  ENVIRONMENT: ${ENVIRONMENT:-demo}
+  HTTP_DEMO_MODE: ${HTTP_DEMO_MODE:-true}
+  PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:8080}
+  OIDC_ISSUER: ${OIDC_ISSUER:-http://localhost:8080/identity/realms/platform}
+  OIDC_INTERNAL_BASE_URL: http://keycloak:8080/identity
+  OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:?scripts/setup_local.py ausführen}
+  OIDC_ENCRYPTION_KEY: ${OIDC_ENCRYPTION_KEY:?scripts/setup_local.py ausführen}
+  SESSION_SECRET: ${SESSION_SECRET:?scripts/setup_local.py ausführen}
+  DATA_SOURCES_FILE: /config/data-sources.json
+services:
+  postgres:
+    build: {context: ., dockerfile: infra/postgres/Dockerfile}
+    image: unternehmensplattform-postgres:18.6-p1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      PLATFORM_APP_PASSWORD: ${PLATFORM_APP_PASSWORD:?}
+      PLATFORM_AUTH_PASSWORD: ${PLATFORM_AUTH_PASSWORD:?}
+      PLATFORM_MIGRATION_PASSWORD: ${PLATFORM_MIGRATION_PASSWORD:?}
+      KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+      - ./infra/postgres/01-roles.sh:/docker-entrypoint-initdb.d/01-roles.sh:ro
+    networks: [data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1g
+  migrate:
+    build: {context: ., dockerfile: apps/api/Dockerfile, target: base}
+    image: unternehmensplattform-api:0.1.0
+    environment:
+      <<: *app-environment
+      MIGRATION_DATABASE_URL: postgresql+psycopg://platform_migrator:${PLATFORM_MIGRATION_PASSWORD}@postgres:5432/platform
+    command: ["sh", "-c", "alembic -c alembic.ini upgrade head && python -m platform_app.seed"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [data]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: "no"
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.3@sha256:ff4257d0d64efbe99ed1ddfaf07765cc3c36dc7518bf8324d41961327f441c54
+    command: ["start", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?}
+      KC_HOSTNAME: ${PUBLIC_ORIGIN:-http://localhost:8080}/identity
+      KC_HTTP_ENABLED: "true"
+      KC_HTTP_RELATIVE_PATH: /identity
+      KC_PROXY_HEADERS: xforwarded
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: warn
+    volumes:
+      - ./.local/platform-realm.json:/opt/keycloak/data/import/platform-realm.json:ro
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [data, identity]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    mem_limit: 1g
+    restart: unless-stopped
+  api:
+    build: {context: ., dockerfile: apps/api/Dockerfile, target: base}
+    image: unternehmensplattform-api:0.1.0
+    environment:
+      <<: *app-environment
+      DATABASE_URL: postgresql+psycopg://platform_app:${PLATFORM_APP_PASSWORD}@postgres:5432/platform
+      AUTH_DATABASE_URL: postgresql+psycopg://platform_auth:${PLATFORM_AUTH_PASSWORD}@postgres:5432/platform
+      REQUEST_LIMIT_PER_MINUTE: "1000"
+      DATASET_LIMIT_PER_ORGANIZATION: ${DATASET_LIMIT_PER_ORGANIZATION:-1000}
+      OPENAI_ENABLED: ${OPENAI_ENABLED:-false}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+      OPENAI_PRICE_VERSION: ${OPENAI_PRICE_VERSION:-}
+      OPENAI_INPUT_PER_MILLION: ${OPENAI_INPUT_PER_MILLION:-}
+      OPENAI_OUTPUT_PER_MILLION: ${OPENAI_OUTPUT_PER_MILLION:-}
+      OPENAI_DAILY_BUDGET: ${OPENAI_DAILY_BUDGET:-1.00}
+      OPENAI_ORGANIZATION_IDS: ${OPENAI_ORGANIZATION_IDS:-}
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      keycloak: {condition: service_started}
+    networks: [data, identity, edge, egress]
+    volumes: [./.local/data-sources.json:/config/data-sources.json:ro]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 768m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health/ready', timeout=12)"]
+      interval: 10s
+      timeout: 15s
+      retries: 30
+    restart: unless-stopped
+  web:
+    build: {context: ., dockerfile: infra/proxy/Dockerfile}
+    image: unternehmensplattform-web:0.1.0
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      api: {condition: service_healthy}
+    networks: [edge, identity]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  data-worker:
+    build: {context: ., dockerfile: apps/api/Dockerfile, target: base}
+    image: unternehmensplattform-api:0.1.0
+    environment:
+      DATA_WORKER_MODE: "true"
+      DATA_WORK_DIRECTORY: /work
+      SQLITE_TMPDIR: /work
+      DATABASE_URL: postgresql+psycopg://platform_app:${PLATFORM_APP_PASSWORD}@postgres:5432/platform
+      DATA_WORKER_ORGANIZATION_IDS: ${DATA_WORKER_ORGANIZATION_IDS:-10000000-0000-4000-8000-000000000001,10000000-0000-4000-8000-000000000002}
+    volumes: [data-work:/work]
+    command: ["python", "-m", "platform_app.data.worker"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    networks: [data]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 1.0
+    restart: unless-stopped
+  intelligence-worker:
+    build: {context: ., dockerfile: apps/api/Dockerfile, target: base}
+    image: unternehmensplattform-api:0.1.0
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-demo}
+      DATA_WORKER_MODE: "true"
+      DATA_WORK_DIRECTORY: /work
+      SQLITE_TMPDIR: /work
+      DATA_SOURCES_FILE: /config/data-sources.json
+      DATASET_LIMIT_PER_ORGANIZATION: ${DATASET_LIMIT_PER_ORGANIZATION:-1000}
+      DATABASE_URL: postgresql+psycopg://platform_app:${PLATFORM_APP_PASSWORD}@postgres:5432/platform
+      DATA_WORKER_ORGANIZATION_IDS: ${DATA_WORKER_ORGANIZATION_IDS:-10000000-0000-4000-8000-000000000001,10000000-0000-4000-8000-000000000002}
+    volumes: [intelligence-work:/work, ./.local/data-sources.json:/config/data-sources.json:ro]
+    command: ["python", "-m", "platform_app.data.intelligence_worker"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    networks: [data, egress]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 1.0
+    restart: unless-stopped
+  tests:
+    profiles: [test]
+    build: {context: ., dockerfile: apps/api/Dockerfile, target: test}
+    environment:
+      <<: *app-environment
+      RUN_DB_TESTS: "1"
+      DATABASE_URL: postgresql+psycopg://platform_app:${PLATFORM_APP_PASSWORD}@postgres:5432/platform
+      AUTH_DATABASE_URL: postgresql+psycopg://platform_auth:${PLATFORM_AUTH_PASSWORD}@postgres:5432/platform
+      MIGRATION_DATABASE_URL: postgresql+psycopg://platform_migrator:${PLATFORM_MIGRATION_PASSWORD}@postgres:5432/platform
+      REQUEST_LIMIT_PER_MINUTE: "10000"
+      HYPOTHESIS_STORAGE_DIRECTORY: /tmp/hypothesis
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    networks: [data, identity]
+    volumes: [./.local/data-sources.json:/config/data-sources.json:ro]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+networks:
+  data: {internal: true}
+  identity: {internal: true}
+  edge: {}
+  egress: {}
+volumes:
+  postgres-data: {}
+  data-work: {}
+  intelligence-work: {}

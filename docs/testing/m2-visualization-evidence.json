@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-12",
+  "scope": "Lokaler M2-Diagrammumfang; gezielte Prüfungen auf Nutzerwunsch",
+  "echarts": "6.1.0",
+  "frontend_tests": 14,
+  "backend": {
+    "passed": 5,
+    "seconds": 15.76,
+    "real_postgresql": true
+  },
+  "mypy": {
+    "passed": true,
+    "source_files": 45
+  },
+  "ruff": {
+    "passed": true,
+    "files": 92
+  },
+  "browser": {
+    "passed": 1,
+    "case_seconds": 15.1,
+    "real_oidc": true,
+    "svg_content": true,
+    "png_signature": true,
+    "mobile_width": 390,
+    "all_six_chart_types": true,
+    "filters_and_versions": true
+  },
+  "runtime_dependency_audit": {
+    "total": 6,
+    "vulnerabilities": 0
+  },
+  "limits": {
+    "max_sample_rows": 300,
+    "max_chunks": 12,
+    "max_chunk_bytes": 4194304,
+    "selected_columns": 2,
+    "max_value_characters": 512
+  },
+  "complete_1gib_load_test_repeated": false,
+  "full_restore_repeated": false,
+  "chart_module": {
+    "minified_kb": 635.99,
+    "gzip_kb": 215.99,
+    "lazy_loaded": true
+  },
+  "existing_1gib_chart_sample": {
+    "source_bytes": 1073741824,
+    "total_rows": 262144,
+    "sample_rows": 300,
+    "first_row": 1,
+    "last_row": 262144,
+    "response_bytes": 15327,
+    "api_duration_ms": 1331.15,
+    "client_with_session_setup_seconds": 6.859,
+    "passed": true,
+    "scope": "FastAPI-TestClient mit regulärer synthetischer Session und echter PostgreSQL-Datei; kein erneuter Upload"
+  },
+  "screenshot": "docs/screenshots/m2-interaktive-diagramme.png",
+  "final_web_image": "sha256:977a7cb9d5af6237c34bbdd86391c868d87c0d54bb68728f60f6812385c56039"
+}

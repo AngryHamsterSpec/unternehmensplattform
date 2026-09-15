@@ -1,0 +1,340 @@
+{
+  "application_version": "0.1.0",
+  "commit": null,
+  "scope": "Lokale synthetische Phase-1-Demo auf Windows/Docker Desktop, Linux amd64",
+  "backend": {
+    "passed": 126,
+    "skipped": 0,
+    "runtime": "Python 3.14.7 / Alpine 3.24.1 / PostgreSQL 18.6",
+    "date": "2026-09-11",
+    "seconds": 6.02
+  },
+  "frontend": {
+    "unit_passed": 6,
+    "format_lint_typecheck_build": "PASSED",
+    "date": "2026-09-11"
+  },
+  "browser": {
+    "passed": 3,
+    "seconds": 8.4,
+    "browser": "Chromium",
+    "date": "2026-09-11",
+    "real_oidc": true,
+    "mobile_viewport": [
+      390,
+      844
+    ]
+  },
+  "security_policy": {
+    "passed": 9
+  },
+  "python_lock_vulnerabilities": 0,
+  "frontend_audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0
+  },
+  "runtime": {
+    "checked_at": "2026-09-11T08:28:18.723046+00:00",
+    "containers": {
+      "api": {
+        "image_id": "sha256:68d4d68a1994850033d83f3be73e40c45daf00fe90d9e5e5406bfdefad1524bf",
+        "configured_user": "10001",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8000/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "web": {
+        "image_id": "sha256:d938b7711f66a1c86733a194758f7e305080ef36c48592c3ce89862c1ed6efd7",
+        "configured_user": "101",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8080/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "8080"
+            }
+          ]
+        },
+        "host_socket_mounted": false
+      },
+      "keycloak": {
+        "image_id": "sha256:ff4257d0d64efbe99ed1ddfaf07765cc3c36dc7518bf8324d41961327f441c54",
+        "configured_user": "1000",
+        "privileged": false,
+        "read_only": false,
+        "published_ports": {
+          "8080/tcp": null,
+          "8443/tcp": null,
+          "9000/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "postgres": {
+        "image_id": "sha256:bd2026a6a73c7fb170baaa73cdbe7c405a1f9b37173840b84ed700f8d3edc8f3",
+        "configured_user": "",
+        "privileged": false,
+        "read_only": false,
+        "published_ports": {
+          "5432/tcp": null
+        },
+        "host_socket_mounted": false
+      }
+    },
+    "database_down_readiness": 503,
+    "database_down_liveness": 200,
+    "recovered": true,
+    "exercise_seconds": 17.005
+  },
+  "http_benchmark": {
+    "measured_at": "2026-09-11T08:24:21.364837+00:00",
+    "scope": "Echter Nginx/HTTP/API/PostgreSQL-Pfad, zehn parallele Sessions einer synthetischen Administrationsidentität in Testmandant B",
+    "system": "Linux",
+    "machine": "x86_64",
+    "python": "3.14.7",
+    "visible_cpus": 14,
+    "organization_scenarios": 300,
+    "created_scenarios": 100,
+    "concurrent_sessions": 10,
+    "read": {
+      "samples": 100,
+      "p95_ms": 209.824,
+      "max_ms": 238.911
+    },
+    "list": {
+      "samples": 10,
+      "p95_ms": 128.669,
+      "max_ms": 128.669
+    },
+    "assessment": {
+      "samples": 10,
+      "p95_ms": 313.643,
+      "max_ms": 313.643
+    },
+    "target_met": true
+  },
+  "security": {
+    "checked_at": "2026-09-11T08:25:17.243967+00:00",
+    "trivy": "0.74.0",
+    "fixture_detected": true,
+    "secrets_found": 0,
+    "fixable_high_or_critical": 2,
+    "local_http_deployment_confirmed": true,
+    "reviewed_findings": [
+      {
+        "image": "keycloak",
+        "id": "CVE-2025-59250",
+        "package": "com.microsoft.sqlserver:mssql-jdbc",
+        "installed": "13.2.1",
+        "fixed": "10.2.4.jre11, 11.2.4.jre11, 12.2.1.jre11, 12.6.5.jre11, 12.8.2.jre11, 12.10.2.jre11, 13.2.1.jre11",
+        "severity": "HIGH",
+        "path": "opt/keycloak/lib/lib/main/com.microsoft.sqlserver.mssql-jdbc-13.2.1.jre11.jar",
+        "status": "false_positive",
+        "reason": "Exakte 13.2.1.jre11-JAR enthält den Herstellerfix; Scanner normalisiert das Versionssuffix.",
+        "source": "https://github.com/microsoft/mssql-jdbc/releases/tag/v13.2.1",
+        "expires": "2026-10-10"
+      },
+      {
+        "image": "keycloak",
+        "id": "CVE-2026-75595",
+        "package": "io.netty:netty-handler",
+        "installed": "4.1.136.Final",
+        "fixed": "4.2.17.Final, 4.1.137.Final",
+        "severity": "CRITICAL",
+        "path": "opt/keycloak/lib/lib/main/io.netty.netty-handler-4.1.136.Final.jar",
+        "status": "not_affected_in_local_demo",
+        "reason": "Kein TLS/SNI/mTLS-Eingang im geprüften Keycloak-HTTP-Demoprofil; verwundbare Bibliothek bleibt inventarisiert.",
+        "source": "https://github.com/netty/netty/security/advisories/GHSA-c4c3-7fpv-j4q5",
+        "expires": "2026-10-10"
+      }
+    ],
+    "actionable_fixable_high_or_critical": 0,
+    "unfixed_high_or_critical": 1,
+    "gate_passed": true
+  },
+  "unfixed_inventory": {
+    "api": [],
+    "web": [],
+    "postgres": [],
+    "keycloak": [
+      {
+        "id": "CVE-2026-22020",
+        "package": "java-21-openjdk-headless",
+        "installed": "1:21.0.12.1.1-1.2.el9",
+        "fixed": null,
+        "severity": "HIGH",
+        "path": null
+      }
+    ]
+  },
+  "not_verified": [
+    "Live-OpenAI",
+    "ARM",
+    "Produktiver TLS-Betrieb",
+    "Remote-GitHub-Actions"
+  ],
+  "restore": {
+    "checked_at": "2026-09-11T08:27:20.904843+00:00",
+    "status": "PASSED",
+    "fresh_postgres_volume": true,
+    "api_web_restart": true,
+    "database_snapshots": {
+      "platform": {
+        "organizations": {
+          "count": 2,
+          "digest": "8ecf4699d31d886cd4723106bd738248"
+        },
+        "users": {
+          "count": 4,
+          "digest": "7d1fc2a91f3b5d5cfc9114aedf62e2b4"
+        },
+        "organization_memberships": {
+          "count": 4,
+          "digest": "2ce972bf7919e18fa30e68b7a3e8ed75"
+        },
+        "membership_roles": {
+          "count": 4,
+          "digest": "68fb189f5b688e284ae22ac504d49ac7"
+        },
+        "company_profiles": {
+          "count": 318,
+          "digest": "b4f55b606bdd152f3b80f7fe51b1c31d"
+        },
+        "company_profile_versions": {
+          "count": 325,
+          "digest": "6f17ca09adbb677ac2bbdd25536e5db3"
+        },
+        "workloads": {
+          "count": 325,
+          "digest": "1860862358b06cb0801ec7ab64fc8332"
+        },
+        "infrastructure_assets": {
+          "count": 0,
+          "digest": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "cost_catalog_versions": {
+          "count": 2,
+          "digest": "9fb3e20cac9e67b0e9dfc48057873288"
+        },
+        "assessments": {
+          "count": 49,
+          "digest": "55ba959edd4cfd386aa6364d11e93ac5"
+        },
+        "architecture_candidates": {
+          "count": 196,
+          "digest": "acb75d0d85fc3a661b4bbccb608135b4"
+        },
+        "cost_estimate_lines": {
+          "count": 980,
+          "digest": "fec4df328c02a1469c90082b9c5845bc"
+        },
+        "agent_runs": {
+          "count": 147,
+          "digest": "fa31302a73d2ebe4a5c8750100b6a40d"
+        },
+        "audit_events": {
+          "count": 390,
+          "digest": "fe976eb323618b3d5a70bf5cabc1ff28"
+        },
+        "explanation_requests": {
+          "count": 4,
+          "digest": "0cbb5abff2dc699cd229056fe419fa2e"
+        },
+        "provider_budget_days": {
+          "count": 2,
+          "digest": "5165f376652421afda20d1beb0b9ce3f"
+        }
+      },
+      "keycloak": {
+        "realm": {
+          "count": 2,
+          "digest": "cef042af75649a8a7df651184c482704"
+        },
+        "user_entity": {
+          "count": 4,
+          "digest": "127b34aa9cd973b5637442e949dcd1c6"
+        },
+        "client": {
+          "count": 14,
+          "digest": "a9d68ccc2d9511d01cf0ee51eb1dec0e"
+        }
+      }
+    },
+    "rls_restored": true,
+    "restored_browser": {
+      "passed": 4,
+      "real_oidc": true,
+      "restored_assessment_id": "bed7863a-d75e-4b5c-abea-1d5112e3f5ae",
+      "restored_result_hash": "47a78d317f747b4c43819fdad0f97e24ad320e35e9534313bf087e709bce77a3",
+      "migration_or_reseed": false
+    },
+    "test_secret_rotation": {
+      "old_secret_rejected": true,
+      "new_secret_accepted": true
+    },
+    "dump_sha256": {
+      "platform": "8d3438ae729f2b3b1b61629905ccbfcc0caa4b77c5785fb768e3046ac1190a1f",
+      "keycloak": "07243ab00a86b12ecfb48f75c0b047a9f2231e6b55d635c7815f2694bc85c8fe"
+    },
+    "scope": "Lokaler Demo-Stack; voller OIDC-/Browsernachweis nur bei restored_browser.",
+    "original_proxy_restored": true
+  },
+  "restore_artifact": ".local/backups/20260911T082501Z/result.json",
+  "previous_http_benchmark": {
+    "measured_at": "2026-09-10T17:38:36.495795+00:00",
+    "scope": "Echter Nginx/HTTP/API/PostgreSQL-Pfad, zehn parallele Sessions einer synthetischen Administrationsidentität in Testmandant B",
+    "system": "Linux",
+    "machine": "x86_64",
+    "python": "3.14.7",
+    "visible_cpus": 14,
+    "organization_scenarios": 200,
+    "created_scenarios": 100,
+    "concurrent_sessions": 10,
+    "read": {
+      "samples": 100,
+      "p95_ms": 433.852,
+      "max_ms": 485.161
+    },
+    "list": {
+      "samples": 10,
+      "p95_ms": 338.812,
+      "max_ms": 338.812
+    },
+    "assessment": {
+      "samples": 10,
+      "p95_ms": 807.785,
+      "max_ms": 807.785
+    },
+    "target_met": true
+  },
+  "restore_cleanup": {
+    "passed": 3
+  },
+  "typing": {
+    "status": "PASSED",
+    "files": 32,
+    "environment": "Linux-Testimage; lokaler Windows-Lauf zuletzt durch Anwendungssteuerung blockiert"
+  },
+  "base_image_comparison": {
+    "bookworm": {
+      "high_critical": 60,
+      "digest": "sha256:9ab8d9c8514b44f90cf0029dd42fdd7e9e211e639c8b995304cc04568dee900f"
+    },
+    "trixie": {
+      "high_critical": 54,
+      "digest": "sha256:cad9a2c871761c413caa6fdd6441c783451e740a48aaeba60ae62a8b53525ef6"
+    },
+    "alpine": {
+      "high_critical": 0,
+      "all_vulnerabilities": 0,
+      "secrets": 0,
+      "digest": "sha256:c6ead215bfd31f1e433d968853b7a769989117115b728874824e6c0a27cb96fc"
+    }
+  }
+}

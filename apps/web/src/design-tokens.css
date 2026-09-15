@@ -1,0 +1,84 @@
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/IBMPlexSans-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/IBMPlexSans-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/IBMPlexSans-SemiBold.woff2') format('woff2');
+}
+/* IT-Kompass: semantische Rollen; gemeinsame Grundlage für M1–M8. */
+:root {
+  --font-ui: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --font-mono: 'Cascadia Code', Consolas, monospace;
+  --surface-canvas: #f4f3ef;
+  --surface-panel: #ffffff;
+  --surface-subtle: #f6f6f2;
+  --surface-hover: #f0f4f1;
+  --text-primary: #202e2b;
+  --text-secondary: #5e6a65;
+  --border-subtle: #dce0d9;
+  --border-strong: #879389;
+  --action-primary: #246655;
+  --action-hover: #184d40;
+  --action-subtle: #eaf2ed;
+  --focus-ring: #976600;
+  --nav-surface: #1c2b28;
+  --nav-hover: #283d36;
+  --nav-active: #314d40;
+  --nav-text: #e3ebe4;
+  --nav-muted: #a8bbb0;
+  --nav-border: #3a4d44;
+  --identity-accent: #ddba6a;
+  --positive: #256447;
+  --positive-surface: #edf5ef;
+  --warning: #805816;
+  --warning-surface: #fff7e7;
+  --negative: #a13536;
+  --negative-surface: #fff0ee;
+  --radius-panel: 6px;
+  --radius-control: 4px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --control-height: 40px;
+  --table-pad-y: 12px;
+  --panel-padding: 22px;
+  --chart-1: #307461;
+  --chart-2: #507b9c;
+  --chart-3: #b18035;
+  --chart-4: #876b97;
+  --chart-5: #51898d;
+  --chart-6: #b36655;
+  --chart-7: #718245;
+  --chart-8: #69738c;
+  --chart-9: #999b98;
+  --chart-10: #b58b5f;
+  --chart-grid: #e5e8e1;
+  --ink: var(--text-primary);
+  --muted: var(--text-secondary);
+  --petrol: var(--action-primary);
+  --line: var(--border-subtle);
+  --panel: var(--surface-panel);
+  --soft: var(--action-subtle);
+}
+:root[data-density='compact'] {
+  --control-height: 34px;
+  --table-pad-y: 7px;
+  --panel-padding: 18px;
+}

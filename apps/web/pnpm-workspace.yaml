@@ -1,0 +1,5 @@
+packages:
+  - .
+storeDir: .local/pnpm-store
+verifyDepsBeforeRun: error
+enableGlobalVirtualStore: false

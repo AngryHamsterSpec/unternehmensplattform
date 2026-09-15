@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-09-13",
+  "status": "IMPLEMENTIERT",
+  "m2_status": "TEILWEISE IMPLEMENTIERT",
+  "units": {
+    "passed": 62,
+    "seconds": 4.29,
+    "parquet_cases": 22
+  },
+  "postgres": {
+    "passed": 1,
+    "seconds": 16.96
+  },
+  "mypy_files": 50,
+  "frontend_units": {
+    "passed": 14,
+    "seconds": 16.15
+  },
+  "browser": {
+    "passed": 1,
+    "seconds": 8
+  },
+  "resource_probe": {
+    "rows": 100003,
+    "columns": 8,
+    "input_bytes": 922641,
+    "seconds": 8.273,
+    "peak_rss_mib": 101.32,
+    "memory_limit_mib": 256,
+    "cpus": 1,
+    "network": "none"
+  },
+  "security": {
+    "source_fixture_detected": true,
+    "source_secrets": 0,
+    "source_vulnerabilities": 0,
+    "pip_audit_known_vulnerabilities": 0,
+    "container_scan_repeated": false
+  },
+  "full_restore_repeated": false,
+  "gib_csv_load_repeated": false,
+  "live_ai_added": false
+}

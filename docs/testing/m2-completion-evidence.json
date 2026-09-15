@@ -1,0 +1,186 @@
+{
+  "checked_at": "2026-09-14T14:16:53.634294+00:00",
+  "milestone": "M2",
+  "status": "IMPLEMENTIERT",
+  "completed": true,
+  "completion_basis": "Ausdrückliche Nutzerentscheidung nach letztem Lauf",
+  "all_acceptance_gates_passed": false,
+  "open_gate": "Aktueller vollständiger Restore-Nachweis",
+  "branch": "master",
+  "commit": null,
+  "scope": "Vereinbarter lokaler M2-Umfang, Windows-Host mit Linux/AMD64-Docker; synthetische Testdaten",
+  "dataset_limit_per_organization": 1000,
+  "manual_changes_preserved": true,
+  "m3_started": false,
+  "live_ai_tested": false,
+  "live_ai_enabled": false,
+  "backend_checks": [
+    {
+      "passed": 26,
+      "seconds": 9.2,
+      "scope": "Neue Fach-/PostgreSQL-Prüfungen; vor letzten Metadatenänderungen"
+    },
+    {
+      "passed": 2,
+      "seconds": 6.8,
+      "scope": "Quellenabbruch und Dezimalreferenzen"
+    },
+    {
+      "passed": 2,
+      "seconds": 20.34,
+      "scope": "Finale API-Historie/Metadaten/Bericht/RLS/Unveränderlichkeit, beide Speicherformate"
+    }
+  ],
+  "frontend": {
+    "passed": 17,
+    "typecheck": true,
+    "lint": true,
+    "build": true,
+    "delayed_import_regression": true
+  },
+  "browser": {
+    "passed": 1,
+    "test_seconds": 21.9,
+    "runner_seconds": 25.1,
+    "channel": "chrome",
+    "real_oidc": true,
+    "source_rls": true,
+    "rules_analysis_exports": true,
+    "plan_preview_confirmed_v2": true,
+    "original_bytes_equal": true,
+    "mobile_width": 390,
+    "page_errors": 0
+  },
+  "restore_cleanup_tests": 4,
+  "mypy_source_files": 60,
+  "security_sources": {
+    "checked_at": "2026-09-14T13:54:03.774143+00:00",
+    "trivy": "0.74.0",
+    "fixture_detected": true,
+    "sources": {
+      "secrets": 0,
+      "vulnerabilities": []
+    },
+    "images": {},
+    "secrets_found": 0,
+    "fixable_high_or_critical": 0,
+    "local_http_deployment_confirmed": false,
+    "reviewed_findings": [],
+    "actionable_fixable_high_or_critical": 0,
+    "unfixed_high_or_critical": 0,
+    "gate_passed": true
+  },
+  "runtime": {
+    "checked_at": "2026-09-14T14:01:01.083028+00:00",
+    "containers": {
+      "api": {
+        "image_id": "sha256:0bf54603fec82f33771524518e90b2d0cd685ad5ee9bfa268454a7b61daaac73",
+        "configured_user": "10001",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8000/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "web": {
+        "image_id": "sha256:b9b5b302f36b1fc20591bdee260194dce99492f254e927eb10f33140f5493404",
+        "configured_user": "101",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8080/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "8080"
+            }
+          ]
+        },
+        "host_socket_mounted": false
+      },
+      "keycloak": {
+        "image_id": "sha256:ff4257d0d64efbe99ed1ddfaf07765cc3c36dc7518bf8324d41961327f441c54",
+        "configured_user": "1000",
+        "privileged": false,
+        "read_only": false,
+        "published_ports": {
+          "8080/tcp": null,
+          "8443/tcp": null,
+          "9000/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "postgres": {
+        "image_id": "sha256:df5e61bc160c7dc342fd184e68407a854e44e2a12cd5bca23b8b6e2601ca0151",
+        "configured_user": "",
+        "privileged": false,
+        "read_only": false,
+        "published_ports": {
+          "5432/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "data-worker": {
+        "image_id": "sha256:0bf54603fec82f33771524518e90b2d0cd685ad5ee9bfa268454a7b61daaac73",
+        "configured_user": "10001",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8000/tcp": null
+        },
+        "host_socket_mounted": false,
+        "memory_bytes": 268435456,
+        "cpu_limit": 1,
+        "internal_network_only": true,
+        "no_identity_or_model_credentials": true,
+        "scratch_on_disk_volume": true,
+        "sqlite_temporary_files_on_disk": true
+      },
+      "intelligence-worker": {
+        "image_id": "sha256:0bf54603fec82f33771524518e90b2d0cd685ad5ee9bfa268454a7b61daaac73",
+        "configured_user": "10001",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8000/tcp": null
+        },
+        "host_socket_mounted": false,
+        "memory_bytes": 268435456,
+        "cpu_limit": 1,
+        "internal_network_only": false,
+        "no_identity_or_model_credentials": true,
+        "scratch_on_disk_volume": true,
+        "sqlite_temporary_files_on_disk": true
+      }
+    },
+    "database_down_readiness": 503,
+    "database_down_liveness": 200,
+    "recovered": true,
+    "exercise_seconds": 19.754
+  },
+  "restore": {
+    "status": "INCOMPLETE",
+    "started_at": "2026-09-14T14:04:43Z",
+    "failed_stage": "Initialer Prüfsummenvergleich vor Backup/Restore",
+    "table": "data_chunks",
+    "timeout_seconds": 180,
+    "backup_created": false,
+    "restore_executed": false,
+    "restored_browser": null,
+    "original_demo_running": true,
+    "both_workers_resumed": true,
+    "orphan_checksum_query_found": false,
+    "rerun": false,
+    "reason_no_rerun": "Ausdrückliche Nutzeranweisung: aktuellen Lauf beenden, M2 dokumentieren und stoppen"
+  },
+  "evidence_limits": [
+    "Kein neuer 1-GiB-Benchmark",
+    "Kein Live-KI-, ARM-, produktiver TLS- oder Remote-CI-Nachweis",
+    "Quellscan vor abschließender kleiner UI-Rennkorrektur; keine Abhängigkeitsänderung",
+    "Runtime-Grenzen vor Web-Neubau geprüft; unveränderte Containerkonfiguration"
+  ],
+  "screenshots": [
+    "../screenshots/m2-vollanalyse.png",
+    "../screenshots/m2-vollanalyse-mobil.png"
+  ]
+}

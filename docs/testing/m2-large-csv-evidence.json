@@ -1,0 +1,155 @@
+{
+  "large_csv": {
+    "result": "passed",
+    "measured_at": "2026-09-12T05:20:18.438248+00:00",
+    "input_bytes": 1073741824,
+    "input_rows": 262144,
+    "chunks": 256,
+    "original_sha256": "7c9a319b4208c976c80f6a03e092ad9d76cc594c92bcf68a09eae063ab0a17bd",
+    "original_download_bytes": 1073741824,
+    "export_bytes": 1076101132,
+    "export_sha256": "f986d3d0477401dd94ebb3fc29a0a5eb5c4fea7d682e5a83ce2efa03465812b4",
+    "dataset_id": "b177392b-1f12-4e10-b50d-ca517aab4675",
+    "upload_seconds": 45.787,
+    "finalize_seconds": 19.861,
+    "processing_seconds": 313.629,
+    "total_seconds": 421.869,
+    "scope": "Realer lokaler Nginx/HTTP/PostgreSQL/Worker-Pfad mit synthetischer DB-Session; OIDC separat im Browser geprüft."
+  },
+  "worker_resources": {
+    "memory_peak_bytes": 268435456,
+    "memory_events": "low 0\nhigh 0\nmax 37413\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "process_memory": [
+      "VmHWM:\t  130224 kB",
+      "VmRSS:\t   53640 kB"
+    ],
+    "checked_at": "2026-09-12T05:21:24.795926+00:00",
+    "memory_limit_bytes": 268435456
+  },
+  "backend": {
+    "passed": 189,
+    "skipped": 0,
+    "seconds": 69.72,
+    "real_postgresql": true
+  },
+  "types": {
+    "source_files": 44,
+    "passed": true
+  },
+  "browser": {
+    "passed": 5,
+    "large_file_bytes": 4500012,
+    "large_file_rows": 450000,
+    "large_test_seconds": 31.0,
+    "real_oidc": true,
+    "last_page_checked": true
+  },
+  "frontend": {
+    "passed": 10,
+    "typescript_build": true,
+    "eslint": true,
+    "prettier": true
+  },
+  "scripts": {
+    "passed": 13,
+    "subtests_passed": 9
+  },
+  "runtime": {
+    "checked_at": "2026-09-12T05:27:06.655763+00:00",
+    "containers": {
+      "api": {
+        "image_id": "sha256:5ba34e5ce4d06893fb9cef4f56d70a2b9c0add90510d5a0eab2a6927b767a34d",
+        "configured_user": "10001",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8000/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "web": {
+        "image_id": "sha256:6d03e3b45204fa808eac4d2230b4aa72cafa74037508735686af5418df0473f1",
+        "configured_user": "101",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8080/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "8080"
+            }
+          ]
+        },
+        "host_socket_mounted": false
+      },
+      "keycloak": {
+        "image_id": "sha256:ff4257d0d64efbe99ed1ddfaf07765cc3c36dc7518bf8324d41961327f441c54",
+        "configured_user": "1000",
+        "privileged": false,
+        "read_only": false,
+        "published_ports": {
+          "8080/tcp": null,
+          "8443/tcp": null,
+          "9000/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "postgres": {
+        "image_id": "sha256:b7cd9b8bde0933ca61ccb9b80012daba8a1ee9d30095890766b91f2b2825ac77",
+        "configured_user": "",
+        "privileged": false,
+        "read_only": false,
+        "published_ports": {
+          "5432/tcp": null
+        },
+        "host_socket_mounted": false
+      },
+      "data-worker": {
+        "image_id": "sha256:5ba34e5ce4d06893fb9cef4f56d70a2b9c0add90510d5a0eab2a6927b767a34d",
+        "configured_user": "10001",
+        "privileged": false,
+        "read_only": true,
+        "published_ports": {
+          "8000/tcp": null
+        },
+        "host_socket_mounted": false,
+        "memory_bytes": 268435456,
+        "cpu_limit": 1,
+        "internal_network_only": true,
+        "no_identity_or_model_credentials": true,
+        "scratch_on_disk_volume": true,
+        "sqlite_temporary_files_on_disk": true
+      }
+    },
+    "database_down_readiness": 503,
+    "database_down_liveness": 200,
+    "recovered": true,
+    "exercise_seconds": 18.306
+  },
+  "security": {
+    "report": ".local/security/20260912T052836Z/summary.json",
+    "checked_at": "2026-09-12T05:28:39.459720+00:00",
+    "trivy": "0.74.0",
+    "fixture_detected": true,
+    "source_secrets": 0,
+    "image_findings": {
+      "api": 0,
+      "web": 0,
+      "postgres": 10,
+      "keycloak": 36
+    }
+  },
+  "restore_followup": {
+    "status": "NOT_PASSED",
+    "started_at": "2026-09-12T05:31:04Z",
+    "dump_restart_snapshots_rls_completed": true,
+    "browser_failed_case": "CSV-Import, Vorschau, bestätigte Version, Export und Rechte",
+    "observed_problem": "Inkonsistenter Kopf-/Versionsstand; CSV-Browserfall im Zeitlimit",
+    "code_corrections": [
+      "Geteilte Datensatzsperre während Detailabruf",
+      "Erwartete Zahl der Restore-Browserfälle 6"
+    ],
+    "original_services_resumed": true,
+    "complete_rerun_after_correction": false
+  }
+}

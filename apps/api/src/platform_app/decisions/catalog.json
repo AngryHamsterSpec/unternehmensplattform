@@ -1,0 +1,108 @@
+{
+  "version": "demo-2026-09-v2",
+  "price_date": "2026-09-09",
+  "valid_until": "2027-09-09",
+  "currency": "EUR",
+  "tax_basis": "NET_EXCLUDING_TAX",
+  "data_classification": "SYNTHETIC",
+  "source": "Erfundene Modellwerte für reproduzierbare Tests, keine Anbieterangebote.",
+  "storage_monthly_unit": "0.20",
+  "staff_monthly_unit": "5000",
+  "memory_monthly_unit": "3.00",
+  "coverage": "Pauschalen enthalten Modellwerte für Lizenzen, Netzwerk, Backup, Support und Wartung. Speicher und RAM werden gesondert ausgewiesen; alle Werte sind synthetisch, netto, ohne Restwert oder Diskontierung.",
+  "plans": [
+    {
+      "key": "SAAS",
+      "label": "Fachsoftware als SaaS",
+      "service": "SAAS",
+      "deployment": "PUBLIC_CLOUD",
+      "location": "PROVIDER",
+      "supported": [
+        "BUSINESS_APP",
+        "FILE_STORAGE"
+      ],
+      "latency": 45,
+      "availability": "99.9",
+      "rto": 3600,
+      "rpo": 900,
+      "staff": "0.1",
+      "monthly_unit": "18",
+      "setup": "500",
+      "unit": "user",
+      "governance": 65,
+      "capacities": {"user_count": 500, "vcpu_count": "16", "memory_gib": "64", "storage_gib": "10000"}
+    },
+    {
+      "key": "PAAS",
+      "label": "Anwendung auf Public PaaS",
+      "service": "PAAS",
+      "deployment": "PUBLIC_CLOUD",
+      "location": "PROVIDER",
+      "supported": [
+        "BUSINESS_APP",
+        "WEB_APP",
+        "DATABASE",
+        "FILE_STORAGE",
+        "ANALYTICS"
+      ],
+      "latency": 20,
+      "availability": "99.95",
+      "rto": 1800,
+      "rpo": 300,
+      "staff": "0.4",
+      "monthly_unit": "85",
+      "setup": "1800",
+      "unit": "vcpu",
+      "governance": 75,
+      "capacities": {"user_count": 1000, "vcpu_count": "64", "memory_gib": "256", "storage_gib": "20000"}
+    },
+    {
+      "key": "IAAS",
+      "label": "Virtuelle Infrastruktur (IaaS)",
+      "service": "IAAS",
+      "deployment": "PUBLIC_CLOUD",
+      "location": "PROVIDER",
+      "supported": [
+        "BUSINESS_APP",
+        "WEB_APP",
+        "DATABASE",
+        "FILE_STORAGE",
+        "ANALYTICS"
+      ],
+      "latency": 12,
+      "availability": "99.9",
+      "rto": 3600,
+      "rpo": 600,
+      "staff": "0.8",
+      "monthly_unit": "55",
+      "setup": "3000",
+      "unit": "vcpu",
+      "governance": 85,
+      "capacities": {"user_count": 2000, "vcpu_count": "64", "memory_gib": "256", "storage_gib": "20000"}
+    },
+    {
+      "key": "HYBRID",
+      "label": "Lokaler Betrieb mit Cloud-Sicherung",
+      "service": "SELF_MANAGED",
+      "deployment": "TRADITIONAL",
+      "location": "ON_PREMISES",
+      "supported": [
+        "BUSINESS_APP",
+        "WEB_APP",
+        "DATABASE",
+        "FILE_STORAGE",
+        "ANALYTICS"
+      ],
+      "latency": 3,
+      "availability": "99.5",
+      "rto": 7200,
+      "rpo": 1800,
+      "staff": "1.2",
+      "monthly_unit": "30",
+      "setup": "12000",
+      "unit": "vcpu",
+      "governance": 90,
+      "capacities": {"user_count": 500, "vcpu_count": "32", "memory_gib": "128", "storage_gib": "10000"}
+    }
+  ]
+}

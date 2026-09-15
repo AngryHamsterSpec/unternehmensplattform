@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-12",
+  "status": "PASSED_SCOPED",
+  "csv_recovery": {
+    "original_datasets_recovered": 5,
+    "row_counts": [
+      25,
+      600,
+      49123,
+      49123,
+      49123
+    ],
+    "column_counts": [
+      33,
+      170,
+      170,
+      170,
+      170
+    ],
+    "last_original_bytes": 140484689,
+    "original_download_hash_verified": true,
+    "export_rows": 49123,
+    "export_max_cell_chars": 175026,
+    "real_preview_succeeded": true,
+    "user_preview_published": false
+  },
+  "aggregation_comparison": {
+    "synthetic_rows": 1000,
+    "columns": 170,
+    "previous_seconds": 3.035,
+    "new_seconds": 0.325,
+    "profiles_equal_excluding_algorithm_version": true
+  },
+  "checks": {
+    "csv_unit_cases": 25,
+    "csv_pg_cases": 6,
+    "json_unit_cases": 12,
+    "json_pg_cases": 2,
+    "frontend_cases": 14,
+    "mypy_source_files": 47,
+    "combined_oidc_browser_cases": 1,
+    "browser_seconds": 10.6,
+    "source_scan_secrets": 0,
+    "source_scan_vulnerabilities": 0
+  },
+  "limitations": [
+    "M2 insgesamt teilweise implementiert",
+    "Vollständiger Restore erneut offen",
+    "Kein gesonderter vollständiger 1-GiB-JSON-Lasttest",
+    "Keine neue Live-KI",
+    "Keine produktive Freigabe"
+  ]
+}
