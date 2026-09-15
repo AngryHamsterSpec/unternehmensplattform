@@ -64,6 +64,7 @@ services:
       KC_LOG_LEVEL: warn
     volumes:
       - ./.local/platform-realm.json:/opt/keycloak/data/import/platform-realm.json:ro
+      - ./infra/keycloak/themes/platform:/opt/keycloak/themes/platform:ro
     depends_on:
       postgres: {condition: service_healthy}
     networks: [data, identity]
