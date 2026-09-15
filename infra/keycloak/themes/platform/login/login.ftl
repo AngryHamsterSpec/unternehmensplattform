@@ -14,8 +14,8 @@
                 <strong>Direkt ausprobieren</strong>
                 <p>Dieser Zugang verwendet ausschließlich synthetische Beispieldaten und eingeschränkte Leserechte.</p>
                 <dl>
-                    <div><dt>Benutzername</dt><dd>${(realm.attributes["publicDemoUsername"]!"recruiter")?html}</dd></div>
-                    <div><dt>Passwort</dt><dd>${(realm.attributes["publicDemoPassword"]!"")?html}</dd></div>
+                    <div><dt>Benutzername</dt><dd>${realm.attributes["publicDemoUsername"]!"recruiter"}</dd></div>
+                    <div><dt>Passwort</dt><dd>${realm.attributes["publicDemoPassword"]!""}</dd></div>
                 </dl>
             </aside>
         </#if>
