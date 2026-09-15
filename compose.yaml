@@ -9,6 +9,7 @@ x-app-environment: &app-environment
   OIDC_ENCRYPTION_KEY: ${OIDC_ENCRYPTION_KEY:?scripts/setup_local.py ausführen}
   SESSION_SECRET: ${SESSION_SECRET:?scripts/setup_local.py ausführen}
   DATA_SOURCES_FILE: /config/data-sources.json
+  PUBLIC_DEMO_ACCESS_ENABLED: ${PUBLIC_DEMO_ACCESS_ENABLED:-false}
 services:
   postgres:
     build: {context: ., dockerfile: infra/postgres/Dockerfile}
@@ -39,7 +40,7 @@ services:
     environment:
       <<: *app-environment
       MIGRATION_DATABASE_URL: postgresql+psycopg://platform_migrator:${PLATFORM_MIGRATION_PASSWORD}@postgres:5432/platform
-    command: ["sh", "-c", "alembic -c alembic.ini upgrade head && python -m platform_app.seed"]
+    command: ["sh", "-c", "alembic -c alembic.ini upgrade head && python -m platform_app.seed && python -m platform_app.recruiter_demo"]
     depends_on:
       postgres: {condition: service_healthy}
     networks: [data]
