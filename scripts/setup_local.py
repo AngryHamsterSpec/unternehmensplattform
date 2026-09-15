@@ -17,6 +17,10 @@ USERS = [
 ]
 
 
+def enabled(value: str | None) -> bool:
+    return (value or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
 def main() -> None:
     path = ROOT / ".env"
     local = ROOT / ".local"
@@ -44,6 +48,9 @@ def main() -> None:
             "ENVIRONMENT": "demo",
             "HTTP_DEMO_MODE": "true",
             "OIDC_ISSUER": "http://localhost:8080/identity/realms/platform",
+            "PUBLIC_DEMO_ACCESS_ENABLED": "false",
+            "PUBLIC_DEMO_USERNAME": "viewer",
+            "PUBLIC_DEMO_PASSWORD": "",
             "OPENAI_ENABLED": "false",
             "OPENAI_API_KEY": "",
             "OPENAI_MODEL": "",
@@ -74,42 +81,27 @@ def main() -> None:
             for line in path.read_text(encoding="utf8").splitlines()
             if line and not line.startswith("#") and "=" in line
         )
+
+    public_demo = enabled(values.get("PUBLIC_DEMO_ACCESS_ENABLED"))
+    public_demo_username = values.get("PUBLIC_DEMO_USERNAME", "viewer").strip() or "viewer"
+    public_demo_password = values.get("PUBLIC_DEMO_PASSWORD", "")
+    if public_demo:
+        if public_demo_username != "viewer":
+            raise RuntimeError("Der öffentliche Demo-Zugang ist bewusst auf das Viewer-Konto begrenzt.")
+        if len(public_demo_password) < 16:
+            raise RuntimeError("PUBLIC_DEMO_PASSWORD benötigt mindestens 16 Zeichen.")
+
     registry = local / "data-sources.json"
     if not registry.exists():
         with registry.open("x", encoding="utf8") as output:
             output.write("[]\n")
-    realm = {
-        "realm": "platform",
-        "enabled": True,
-        "displayName": "Unternehmensplattform · lokale Demo",
-        "registrationAllowed": False,
-        "resetPasswordAllowed": False,
-        "loginWithEmailAllowed": False,
-        "internationalizationEnabled": True,
-        "supportedLocales": ["de"],
-        "defaultLocale": "de",
-        "bruteForceProtected": True,
-        "permanentLockout": False,
-        "failureFactor": 5,
-        "sslRequired": "none",
-        "clients": [
-            {
-                "clientId": "platform",
-                "enabled": True,
-                "protocol": "openid-connect",
-                "publicClient": False,
-                "secret": values["OIDC_CLIENT_SECRET"],
-                "standardFlowEnabled": True,
-                "directAccessGrantsEnabled": False,
-                "serviceAccountsEnabled": False,
-                "implicitFlowEnabled": False,
-                "redirectUris": ["http://localhost:8080/api/v1/auth/callback"],
-                "webOrigins": ["http://localhost:8080"],
-                "attributes": {"pkce.code.challenge.method": "S256"},
-                "defaultClientScopes": ["profile", "email"],
-            }
-        ],
-        "users": [
+
+    public_origin = values.get("PUBLIC_ORIGIN", "http://localhost:8080").rstrip("/")
+    viewer_password = public_demo_password if public_demo else values["DEMO_PASSWORD"]
+    realm_users = []
+    for uid, username, name in USERS:
+        password = viewer_password if username == "viewer" else values["DEMO_PASSWORD"]
+        realm_users.append(
             {
                 "id": uid,
                 "username": username,
@@ -121,13 +113,51 @@ def main() -> None:
                 "credentials": [
                     {
                         "type": "password",
-                        "value": values["DEMO_PASSWORD"],
+                        "value": password,
                         "temporary": False,
                     }
                 ],
             }
-            for uid, username, name in USERS
+        )
+
+    realm = {
+        "realm": "platform",
+        "enabled": True,
+        "displayName": "Unternehmensplattform · Demo",
+        "loginTheme": "platform",
+        "attributes": {
+            "publicDemoEnabled": "true" if public_demo else "false",
+            "publicDemoUsername": public_demo_username,
+            "publicDemoPassword": public_demo_password if public_demo else "",
+        },
+        "registrationAllowed": False,
+        "resetPasswordAllowed": False,
+        "loginWithEmailAllowed": False,
+        "internationalizationEnabled": True,
+        "supportedLocales": ["de"],
+        "defaultLocale": "de",
+        "bruteForceProtected": True,
+        "permanentLockout": False,
+        "failureFactor": 5,
+        "sslRequired": "none" if enabled(values.get("HTTP_DEMO_MODE")) else "external",
+        "clients": [
+            {
+                "clientId": "platform",
+                "enabled": True,
+                "protocol": "openid-connect",
+                "publicClient": False,
+                "secret": values["OIDC_CLIENT_SECRET"],
+                "standardFlowEnabled": True,
+                "directAccessGrantsEnabled": False,
+                "serviceAccountsEnabled": False,
+                "implicitFlowEnabled": False,
+                "redirectUris": [public_origin + "/api/v1/auth/callback"],
+                "webOrigins": [public_origin],
+                "attributes": {"pkce.code.challenge.method": "S256"},
+                "defaultClientScopes": ["profile", "email"],
+            }
         ],
+        "users": realm_users,
     }
     # Exklusives Erstellen verhindert stilles Überschreiben bei paralleler Einrichtung.
     if not path.exists():
@@ -136,13 +166,21 @@ def main() -> None:
     (local / "platform-realm.json").write_text(
         json.dumps(realm, ensure_ascii=False, indent=2), encoding="utf8"
     )
-    (local / "demo-zugang.txt").write_text(
+    access_text = (
         "Nur lokale synthetische Demo. Konten: admin, analyst, viewer, mandant-b\n"
-        "Gemeinsames zufälliges Demo-Passwort: " + values["DEMO_PASSWORD"] + "\n",
-        encoding="utf8",
+        "Gemeinsames zufälliges Demo-Passwort: " + values["DEMO_PASSWORD"] + "\n"
     )
+    if public_demo:
+        access_text += (
+            "Öffentlicher Recruiter-Zugang: "
+            + public_demo_username
+            + " / "
+            + public_demo_password
+            + "\n"
+        )
+    (local / "demo-zugang.txt").write_text(access_text, encoding="utf8")
     print(
-        "Lokale Konfiguration erstellt. Zugangsdaten: .local/demo-zugang.txt. Keine Geheimnisse im Git."
+        "Demo-Konfiguration erstellt. Zugangsdaten: .local/demo-zugang.txt. Keine Geheimnisse im Git."
     )
 
 
