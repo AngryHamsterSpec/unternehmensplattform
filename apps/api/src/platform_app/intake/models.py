@@ -20,6 +20,8 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
+# Register the identity tables referenced by the FK strings below in the shared metadata.
+from platform_app.identity import models as identity_models  # noqa: F401
 from platform_app.shared.db import Base
 
 
