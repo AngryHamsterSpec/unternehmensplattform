@@ -1,0 +1,69 @@
+.recruiter-demo {
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #d5e7e4;
+  border-left: 4px solid #2b7a70;
+  border-radius: 0.45rem;
+  background: #f4f9f8;
+  color: #183c38;
+}
+
+.recruiter-demo__eyebrow {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #2b7a70;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.recruiter-demo strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1rem;
+}
+
+.recruiter-demo p {
+  margin: 0 0 0.9rem;
+  color: #496662;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.recruiter-demo dl,
+.recruiter-demo dd {
+  margin: 0;
+}
+
+.recruiter-demo dl {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.recruiter-demo dl > div {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.8fr) minmax(0, 1.2fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.recruiter-demo dt {
+  color: #60736f;
+  font-size: 0.75rem;
+}
+
+.recruiter-demo dd {
+  overflow-wrap: anywhere;
+  color: #183c38;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (max-width: 540px) {
+  .recruiter-demo dl > div {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+}
