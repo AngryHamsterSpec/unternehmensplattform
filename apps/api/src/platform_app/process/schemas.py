@@ -189,9 +189,7 @@ class SimulationInput(Contract):
     hypothesis: str = Field(min_length=10, max_length=2000)
     risk: str = Field(min_length=10, max_length=2000)
     validation: str = Field(min_length=10, max_length=2000)
-    estimated_cost: Decimal | None = Field(
-        default=None, ge=0, le=1000000000, allow_inf_nan=False
-    )
+    estimated_cost: Decimal | None = Field(default=None, ge=0, le=1000000000, allow_inf_nan=False)
 
 
 class SimulationResult(Contract):
