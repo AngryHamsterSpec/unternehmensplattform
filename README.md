@@ -2,7 +2,7 @@
 
 **Plattform für IT-Architekturentscheidungen und Datenqualität**
 
-Eine deutschsprachige Webanwendung zur strukturierten Bewertung technischer Unternehmensszenarien und zur nachvollziehbaren Verarbeitung tabellarischer Daten. Die Plattform verbindet Entscheidungslogik, Datenqualität, Versionierung, rollenbasierte Zugriffe und reproduzierbare Prüfabläufe in einer lokalen, containerisierten Umgebung.
+Eine Webanwendung zur strukturierten Bewertung technischer Unternehmensszenarien und zur nachvollziehbaren Verarbeitung tabellarischer Daten. Die Plattform verbindet Entscheidungslogik, Datenqualität, Versionierung, rollenbasierte Zugriffe und reproduzierbare Prüfabläufe in einer lokalen, containerisierten Umgebung.
 
 > Alle Demo-Unternehmen, Beispieldaten und Katalogpreise sind synthetisch.
 
