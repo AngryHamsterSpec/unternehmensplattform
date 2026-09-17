@@ -35,7 +35,9 @@ class EventMapping(Contract):
         if len(values) != len(set(values)):
             raise ValueError("Jede zugeordnete Spalte darf nur eine Bedeutung besitzen.")
         if self.start and self.duration:
-            raise ValueError("Startzeit oder Dauer auswählen; widersprüchliche Zeitquellen vermeiden.")
+            raise ValueError(
+                "Startzeit oder Dauer auswählen; widersprüchliche Zeitquellen vermeiden."
+            )
         return self
 
 
@@ -47,17 +49,25 @@ class ProcessInput(Contract):
     naive_timestamps_as_utc: bool = False
     duplicate_policy: Literal["keep", "exclude_exact"] = "keep"
     end_activities: list[Name] = Field(default_factory=list, max_length=30)
-    error_statuses: list[Name] = Field(default_factory=lambda: ["error", "failed", "fehler"], max_length=30)
+    error_statuses: list[Name] = Field(
+        default_factory=lambda: ["error", "failed", "fehler"], max_length=30
+    )
     sla_seconds: Seconds | None = None
     wait_target_seconds: Seconds | None = None
-    capacity_hours_per_actor: Decimal | None = Field(default=None, gt=0, le=1000000, allow_inf_nan=False)
+    capacity_hours_per_actor: Decimal | None = Field(
+        default=None, gt=0, le=1000000, allow_inf_nan=False
+    )
     currency: str = Field(default="EUR", pattern=r"^[A-Z]{3}$")
 
     @model_validator(mode="after")
     def semantics(self) -> Self:
         if self.sla_seconds is not None and not self.end_activities:
-            raise ValueError("SLA benötigt explizite Endaktivitäten zur Erkennung abgeschlossener Fälle.")
-        if self.capacity_hours_per_actor is not None and not (self.mapping.actor and (self.mapping.start or self.mapping.duration)):
+            raise ValueError(
+                "SLA benötigt explizite Endaktivitäten zur Erkennung abgeschlossener Fälle."
+            )
+        if self.capacity_hours_per_actor is not None and not (
+            self.mapping.actor and (self.mapping.start or self.mapping.duration)
+        ):
             raise ValueError("Kapazitätsauswertung benötigt Actor und Startzeit oder Dauer.")
         return self
 
@@ -179,7 +189,9 @@ class SimulationInput(Contract):
     hypothesis: str = Field(min_length=10, max_length=2000)
     risk: str = Field(min_length=10, max_length=2000)
     validation: str = Field(min_length=10, max_length=2000)
-    estimated_cost: Decimal | None = Field(default=None, ge=0, le=1000000000, allow_inf_nan=False)
+    estimated_cost: Decimal | None = Field(
+        default=None, ge=0, le=1000000000, allow_inf_nan=False
+    )
 
 
 class SimulationResult(Contract):
