@@ -385,7 +385,7 @@ test('CSV über 128 KiB: abschnittsweiser Browserimport und vollständiges Profi
     ),
   ).toBeTruthy();
   await page.getByText('Metadaten und Prüfsumme', { exact: true }).click();
-  await expect(page.getByText('csv-profile-stream-2', { exact: false })).toBeVisible();
+  await expect(page.getByText('csv-profile-stream-3', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Letzte Zeilen', exact: true }).click();
   await expect(page.getByText('449.976–450.000 von 450.000')).toBeVisible();
 });
