@@ -34,7 +34,7 @@ jobs:
           python -m mypy --config-file apps/api/pyproject.toml apps/api/src/platform_app
           python -m pytest apps/api/tests -p no:cacheprovider -q
           python scripts/generate_contracts.py
-          pnpm --dir apps/web exec prettier --write src/generated/domain.ts
+          pnpm --dir apps/web exec prettier --write --ignore-path /dev/null src/generated/domain.ts
           git diff --exit-code -- apps/web/src/generated/domain.ts docs/contracts/domain.schema.json
           python scripts/check_docs.py
           python -m unittest discover -s scripts -p "test_*.py"
