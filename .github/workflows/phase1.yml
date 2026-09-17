@@ -1,7 +1,8 @@
 name: Plattform und M2-Datenabläufe prüfen
 on:
   push:
-  pull_request:
+    branches:
+      - main
 permissions:
   contents: read
 concurrency:
@@ -74,4 +75,7 @@ jobs:
         run: python scripts/run_e2e.py
       - name: Lokalen CI-Stack beenden
         if: always()
-        run: docker compose down --volumes --remove-orphans
+        run: |
+          if [ -f .env ]; then
+            docker compose down --volumes --remove-orphans
+          fi
