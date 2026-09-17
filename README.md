@@ -1,21 +1,109 @@
 # Unternehmensplattform
 
-Deutsche Arbeitskonsole für IT-Architekturentscheidungen und Datenqualität: Unternehmensszenarien bewerten, Kosten und Alternativen vergleichen sowie tabellarische Dateien und freigegebene Datenbankquellen prüfen, analysieren, nachvollziehbar bereinigen und versioniert exportieren.
+**Plattform für IT-Architekturentscheidungen und Datenqualität**
 
-**M1 und der vereinbarte M2-Funktionsumfang sind lokal implementiert und geprüft. M2 ist auf Nutzeranweisung erledigt; der aktuelle Restore-Nachweis bleibt wegen Timeout offen. M3 wurde nicht begonnen. [Abschlussbericht](docs/testing/M2_COMPLETION_REPORT.md), [Lieferstand und Betriebsgrenzen](docs/STATUS.md).** Alle Demo-Unternehmen und Katalogpreise sind synthetisch.
+Eine deutschsprachige Webanwendung zur strukturierten Bewertung technischer Unternehmensszenarien und zur nachvollziehbaren Verarbeitung tabellarischer Daten. Die Plattform verbindet Entscheidungslogik, Datenqualität, Versionierung, rollenbasierte Zugriffe und reproduzierbare Prüfabläufe in einer lokalen, containerisierten Umgebung.
+
+> Alle Demo-Unternehmen, Beispieldaten und Katalogpreise sind synthetisch.
+
+## Überblick
+
+Die Anwendung deckt zwei zentrale Arbeitsbereiche ab:
+
+- **Architekturentscheidungen:** technische Szenarien erfassen, Varianten bewerten, Kosten und Leistungsaspekte vergleichen und Ergebnisse versionssicher nachvollziehen.
+- **Datenwerkstatt:** Dateien und freigegebene PostgreSQL-Quellen importieren, Qualität analysieren, Bereinigungen als Vorschau prüfen und bestätigte Versionen sicher exportieren.
+
+Der Fokus liegt auf nachvollziehbaren Datenflüssen, klaren Berechtigungsgrenzen und automatisierter Qualitätssicherung.
+
+## Kernfunktionen
+
+### IT-Architektur und Bewertung
+
+- Versionierte Unternehmensszenarien, Workloads und Infrastruktur-Assets
+- Vergleich von SaaS-, PaaS-, IaaS- und Hybridvarianten
+- Gewichtete Bewertung von Wirtschaftlichkeit und Leistung
+- Reproduzierbare Berechnungen mit Dezimalarithmetik
+- Vergleich gespeicherter Ergebnisse und historischer Stände
+- Rollenbasierte Organisationszugriffe mit Mandantentrennung
+- Auditierbare Änderungen und nachvollziehbare Bewertungsverläufe
+
+### Datenwerkstatt
+
+- Import von **CSV, JSON, JSONL, XLSX, Parquet und SQLite**
+- Anbindung freigegebener **PostgreSQL-Quellen**
+- Dateiuploads bis **1 GiB** mit abschnittsweiser Verarbeitung
+- Qualitätsprofile, Statistiken und Datenvisualisierungen
+- Manuelle und assistierte Bereinigungsschritte mit Vorschau vor Übernahme
+- Versionierte Datensätze und unveränderte Originaldateien
+- Sichere CSV-Exporte mit Schutz vor Formel-Injektion
+- Diagramme als interaktive Ansicht sowie PNG-/SVG-Export
+
+## Technischer Stack
+
+| Bereich | Technologien |
+| --- | --- |
+| Backend | Python 3.12, FastAPI, Pydantic, SQLAlchemy |
+| Frontend | React, TypeScript, Vite, ECharts |
+| Datenbank | PostgreSQL |
+| Identität | OIDC / PKCE, Keycloak |
+| Container | Docker, Docker Compose |
+| Tests | Pytest, Vitest, Playwright |
+| Qualität | Ruff, Mypy, Prettier, ESLint |
+| Paketmanagement | pip mit Hash-Locks, pnpm |
+
+## Architektur
+
+```text
+Browser
+  │
+  ▼
+Reverse Proxy
+  │
+  ├── React Frontend
+  │
+  ├── FastAPI Backend
+  │     ├── Entscheidungslogik
+  │     ├── Datenverarbeitung
+  │     ├── Rollen & Autorisierung
+  │     └── Audit & Versionierung
+  │
+  ├── Keycloak (OIDC)
+  │
+  └── PostgreSQL
+        └── Row-Level Security / Mandantentrennung
+```
+
+Die Backend-Module sind fachlich getrennt und dokumentieren Datenfluss, Fehlerfälle, Erweiterungspunkte und Tests jeweils in eigenen README-Dateien.
 
 ## Lokale Demo starten
 
-Voraussetzungen: laufendes Docker Desktop mit Linux-Containern und Compose sowie Python ab 3.12 für die einmalige Einrichtung.
+### Voraussetzungen
+
+- Docker Desktop mit Linux-Containern und Compose
+- Python 3.12 oder neuer
+
+### Start
 
 ```sh
 python scripts/setup_local.py
 docker compose up --build -d --wait --wait-timeout 240
 ```
 
-Öffne [die lokale Anwendung](http://localhost:8080). Die Konten admin, analyst, viewer und mandant-b verwenden das einmalig erzeugte zufällige Demo-Passwort aus .local/demo-zugang.txt. Diese Datei und .env sind von Git und vom Image-Build ausgeschlossen. Vorhandene Konfiguration wird nicht überschrieben. Die Demo bindet ausschließlich 127.0.0.1:8080.
+Anschließend:
 
-Anmelden → Organisation wählen → neues Szenario → synthetisches Beispiel laden oder eigene Testwerte eingeben → speichern → Bewertung starten. Die gleiche Profilversion lässt sich mit Wirtschafts- und Leistungsgewichtung vergleichen. Fehlende Pflichtwerte liefern eine offene Datenlage; jede historische Bewertung bewahrt ihren ursprünglichen Stand.
+```text
+http://localhost:8080
+```
+
+Die Demo-Konten `admin`, `analyst`, `viewer` und `mandant-b` verwenden das lokal erzeugte Passwort aus:
+
+```text
+.local/demo-zugang.txt
+```
+
+`.env` und lokale Zugangsdaten werden nicht versioniert.
+
+### Stoppen und erneut starten
 
 ```sh
 docker compose ps
@@ -23,75 +111,118 @@ docker compose stop
 docker compose up -d --wait
 ```
 
-stop erhält die Volumes. down --volumes entfernt Daten und gehört ausschließlich in ausdrücklich wegwerfbare Testumgebungen.
+`docker compose stop` erhält die Volumes. `docker compose down --volumes` entfernt lokale Testdaten vollständig.
 
-## Was Phase 1 enthält
+## Typischer Ablauf
 
-- OIDC mit PKCE, serverseitige Sessions, CSRF, Organisationsrollen und PostgreSQL-RLS.
-- Versionierte Profile, Arbeitslasten und Infrastruktur-Assets mit Konflikterkennung.
-- Getrennte Service-, Deployment- und Hostingachsen für SaaS, PaaS, IaaS und Hybrid.
-- Harte Bedingungen, normierte Gewichte, Dezimal-TCO, Sensitivität und unabhängige Ergebnisprüfung.
-- Deutsche Formular-, Ergebnis-, Vergleichs-, Mitglieder- und Auditansichten.
-- Optionale KI-Erklärung mit minimierten Daten, Zustimmung, Tagesbudget und sicherem Ausfall.
+### Architekturentscheidung
 
-Ein KI-Schlüssel ist für den Kernablauf nicht erforderlich. Live-KI bleibt deaktiviert, bis Modell, Schlüssel, geprüfte Preisversion und Organisationsfreigabe explizit konfiguriert sind. Der Adapter verändert die fachliche Bewertung nicht. Näheres: [Erklärungsmodul](apps/api/src/platform_app/explanations/README.md).
+```text
+Anmelden
+→ Organisation wählen
+→ Szenario anlegen
+→ Beispiel oder eigene Werte erfassen
+→ Bewertung starten
+→ Ergebnis prüfen
+→ Varianten vergleichen
+```
 
-## Datenwerkstatt
+### Datenanalyse
 
-Anmelden → Musterwerk IT wählen → Datenwerkstatt → Datei oder freigegebene PostgreSQL-Quelle importieren. Unterstützt: CSV, JSON/JSONL, XLSX, Parquet und SQLite-Snapshots. Unter Qualität & Statistik Vollanalysen und wiederverwendbare Regeln starten; Berichte und Diagramme exportieren. Manuelle oder assistierte Bereinigungspläne erzeugen zuerst eine Vorschau; erst die Bestätigung legt eine neue Version an. Originalbytes und Herkunft bleiben erhalten. Für die synthetische PostgreSQL-Quelle einmalig `python scripts/setup_data_source_demo.py` ausführen. [Umfang, Grenzen und Bedienung](apps/api/src/platform_app/data/README.md).
+```text
+Anmelden
+→ Datenwerkstatt öffnen
+→ Datei oder Datenquelle importieren
+→ Qualität und Statistik prüfen
+→ Bereinigung planen
+→ Vorschau kontrollieren
+→ neue Version bestätigen
+→ Ergebnis exportieren
+```
 
-Eine aktuelle Ansicht der synthetischen Demo: [Datenwerkstatt](docs/screenshots/m2-datenwerkstatt.png).
+## Sicherheit
 
-## Entwicklung und Prüfung
+Die Plattform verwendet unter anderem:
 
-Python-Abhängigkeiten sind in requirements.lock und requirements-test.lock mit Hashes gesperrt, die vollständige Auflösung in uv.lock. Frontend: Node 24, pnpm 11.19.0.
+- OIDC mit PKCE
+- serverseitige Sessions
+- CSRF-Schutz
+- rollenbasierte Autorisierung
+- PostgreSQL Row-Level Security
+- Mandantentrennung
+- unveränderte Originaldateien und Prüfsummen
+- sichere Exportbehandlung für Tabelleninhalte
+- restriktive Security-Header
+- automatisierte Dependency- und Containerprüfungen
+
+Weitere Details befinden sich in [SECURITY.md](SECURITY.md) und im [Bedrohungsmodell](docs/security/THREAT_MODEL.md).
+
+## Tests und Qualitätssicherung
+
+Backend, Frontend und Laufzeitumgebung werden automatisiert geprüft. Der CI-Ablauf umfasst unter anderem:
 
 ```sh
-python -m venv .venv
-# Die virtuelle Umgebung aktivieren.
-python -m pip install --require-hashes -r apps/api/requirements-test.lock
-# PYTHONPATH=apps/api/src setzen oder lokal mit --no-deps -e apps/api installieren.
-python -m pip install --no-deps -e apps/api
-pnpm --dir apps/web install --frozen-lockfile
+python -m ruff format --check --config apps/api/pyproject.toml apps/api/src apps/api/tests scripts
+python -m ruff check --config apps/api/pyproject.toml apps/api/src apps/api/tests scripts
+python -m mypy --config-file apps/api/pyproject.toml apps/api/src/platform_app
 python -m pytest apps/api/tests -p no:cacheprovider -q
+
+pnpm --dir apps/web run format:check
 pnpm --dir apps/web run lint
 pnpm --dir apps/web run build
 pnpm --dir apps/web run test
-docker compose --profile test run --build --rm tests
-pnpm --dir apps/web exec playwright install chromium
-python scripts/run_e2e.py
-python scripts/check_runtime.py
-python scripts/check_restore.py --full-stack
-python scripts/install_trivy.py
-python scripts/check_security.py
 ```
 
-Die DB-Tests verwenden echte PostgreSQL-Rollen; ihre Session-Fixture ersetzt nur den vorgelagerten Login. Der Browserworkflow meldet sich tatsächlich über Keycloak an. Der vollständige Restore-Test erstellt ein getrenntes Compose-Projekt mit frischem Volume, prüft dort echten OIDC-Login und historische Bewertungen und entfernt nur dieses Testprojekt anschließend. Dafür wird der lokale Originalproxy kurz pausiert und automatisch wieder gestartet. --isolated-browser ergänzt bei Bedarf die isolierte Windows-Testinstallation. Dumps bleiben vertraulich unter .local/backups. Vollständige Prüfbefehle und Ergebnisse: [Prüfbericht](docs/testing/PHASE_1_REPORT.md).
+Zusätzlich werden Integrations- und Browserabläufe mit PostgreSQL, Keycloak, Docker und Playwright geprüft.
 
-Bei beschädigten Paketdateien in synchronisierten Windows-Verzeichnissen kann python scripts/run_e2e.py --isolated die gesperrten Browser-Testabhängigkeiten in einem temporären Verzeichnis installieren. Der Bericht nennt diesen Pfad. Die Anwendung wird dabei weiterhin über den echten laufenden Docker-Stack geprüft.
+## Projektstruktur
 
-Der Frontend-Prüflauf lässt sich außerdem vollständig unter Linux ausführen:
+```text
+.
+├── apps/
+│   ├── api/                # FastAPI-Backend
+│   └── web/                # React-/TypeScript-Frontend
+├── docs/                   # Architektur, Verträge, ADRs und Prüfberichte
+├── infra/                  # Container- und Proxy-Konfiguration
+├── scripts/                # Setup-, Prüf- und Wartungsskripte
+├── .github/workflows/      # CI
+├── compose.yaml
+├── SECURITY.md
+└── README.md
+```
+
+## Wichtige Dokumentation
+
+- [Architektur](docs/ARCHITECTURE.md)
+- [API-Verträge](docs/API_CONTRACTS.md)
+- [Projektverfassung](docs/PROJECT_CHARTER.md)
+- [Sicherheitsmodell](docs/security/THREAT_MODEL.md)
+- [Datenmodul](apps/api/src/platform_app/data/README.md)
+- [Identität und Zugriff](apps/api/src/platform_app/identity/README.md)
+- [Entscheidungslogik](apps/api/src/platform_app/decisions/README.md)
+- [Bewertungen](apps/api/src/platform_app/assessments/README.md)
+
+## Entwicklung
 
 ```sh
-docker build -f infra/proxy/Dockerfile --target test -t unternehmensplattform-web-tests:0.1.0 .
+python -m venv .venv
+python -m pip install --require-hashes -r apps/api/requirements-test.lock
+python -m pip install --no-deps -e apps/api
+pnpm --dir apps/web install --frozen-lockfile
 ```
 
-Der lokale Image-Scan hat zwei begründete befristete Keycloak-Einordnungen und noch einen hohen Keycloak-Herstellerbefund. Das API-Image ist im aktuellen Scan ohne Paketbefund. [Sicherheitsgrenzen](SECURITY.md) und [ADR 0003](docs/adr/0003-phase1-security-and-performance.md) sind Teil des Lieferstands.
+Für lokale Python-Aufrufe `PYTHONPATH=apps/api/src` setzen, falls das Backend nicht editable installiert wurde.
 
-## Orientierung
+## Projektziel
 
-[Projektverfassung](docs/PROJECT_CHARTER.md) · [Phase-1-Auftrag](docs/PHASE_1_SPEC.md) · [Architektur](docs/ARCHITECTURE.md) · [Umsetzungsentscheidungen](docs/adr/0002-phase1-runtime-and-contracts.md) · [API](docs/API_CONTRACTS.md) · [Bedrohungsmodell](docs/security/THREAT_MODEL.md)
+Dieses Repository demonstriert die Umsetzung einer modularen Unternehmensanwendung mit Fokus auf:
 
-Quellmodule: [Identität](apps/api/src/platform_app/identity/README.md), [Erfassung](apps/api/src/platform_app/intake/README.md), [Fachrechnung](apps/api/src/platform_app/decisions/README.md), [Bewertungen](apps/api/src/platform_app/assessments/README.md), [Erklärungen](apps/api/src/platform_app/explanations/README.md). Jedes Modul erläutert Datenfluss, Entscheidungen, Ausfälle, Erweiterungen und Tests.
+- saubere Systemarchitektur
+- reproduzierbare fachliche Logik
+- sichere Authentifizierung und Autorisierung
+- robuste Datenverarbeitung
+- Versionierung und Nachvollziehbarkeit
+- automatisierte Tests über mehrere Ebenen
+- containerisierte lokale Ausführung
 
-Die Datenwerkstatt ergänzt jetzt einen vollständigen begrenzten CSV-Ablauf: Import, Qualitätsprofil, manuelle Vorschau, bestätigte Version und sicherer Export. [Datenmodul](apps/api/src/platform_app/data/README.md) und [M2-Prüfbericht](docs/testing/M2_CSV_REPORT.md) erklären Umfang und Grenzen. Weitere Datenformate, Prozessanalyse, Cloud-Adapter, Security Lab, Agent Factory und Support bleiben spätere Ausbauschritte.
-
-
-CSV-Dateien dürfen jetzt bis **1 GiB** groß sein. Uploads erfolgen abschnittsweise mit Fortschritt; die Verarbeitung nutzt einen begrenzten Hintergrundworker und Datenträger. Versionen und sichere Exporte bleiben vollständig, Originale unverändert. [Funktionsgrenzen und Bedienung](apps/api/src/platform_app/data/README.md) · [1-GiB-Prüfbericht](docs/testing/M2_LARGE_CSV_REPORT.md).
-
-
-### Moderne Datenvisualisierung
-
-In **Datenwerkstatt → Datensatz öffnen → Visuelle Analyse** stehen Balken, Ring, Datenqualität, Histogramm, Linie und Streudiagramm bereit. Mit **Diagramm-Beispiel laden · 180 Zeilen** lässt sich eine synthetische Vertriebsanalyse importieren. Interaktiver und statischer Modus, Spaltenwahl, Wertefilter, Zoom, Tabelle sowie PNG-/SVG-Export sind eingebunden.
-
-Vollständige Profilwerte und begrenzte Diagrammauswahl werden ausdrücklich bezeichnet. Auch bei der gespeicherten 1-GiB-Testdatei liefert die neue Diagramm-API höchstens 300 Zeilen. [Umfang und Nachweise](docs/testing/M2_VISUALIZATION_REPORT.md).
+Die technische Dokumentation im Repository beschreibt Entscheidungen, Grenzen und Prüfnachweise detaillierter als diese Übersicht.
